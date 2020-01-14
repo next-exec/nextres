@@ -1,0 +1,26 @@
+{
+  "name": "nextres",
+  "version": "0.0.1",
+  "description": "The Next House Resident Dashboard System",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "tslint": "5.20.1",
+    "tslint-config-standard": "9.0.0",
+    "typescript": "3.7.4"
+  },
+  "dependencies": {
+    "copy-webpack-plugin": "5.1.1",
+    "css-loader": "3.4.2",
+    "file-loader": "5.0.2",
+    "mini-css-extract-plugin": "0.8.0",
+    "ts-loader": "6.2.1",
+    "webpack": "4.41.5",
+    "webpack-cli": "3.3.10"
+  },
+  "scripts": {
+    "development": "./node_modules/.bin/webpack --mode=development",
+    "production": "./node_modules/.bin/webpack --mode=production",
+    "watch": "./node_modules/.bin/webpack --mode=development --watch"
+  }
+}
