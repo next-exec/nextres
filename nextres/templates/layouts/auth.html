@@ -1,0 +1,22 @@
+<html lang="en">
+  <head>
+    <title>{% block title %}{% endblock %} - Next House Resident Dashboard</title>
+    <link href="/static/css/app.css" rel="stylesheet">
+    <script src="/static/js/app.js"></script>
+  </head>
+
+  <body class="layout-top-nav">
+    <div class="wrapper">
+      <div class="content-wrapper" style="min-height: 100vh">
+        <div class="content-header"></div>
+        <div class="content">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">{% block content %}{% endblock %}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
