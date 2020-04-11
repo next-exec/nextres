@@ -1,0 +1,15 @@
+{% extends "layouts/auth.html" %}
+{% block title %}Access Denied{% endblock %}
+{% block content %}
+  <div class="card card-danger">
+    <div class="card-header">
+      <h3 class="card-title">Next House Residents Only</h3>
+    </div>
+    <div class="card-body">
+      <p>
+        Sorry, NextRes is only accessible to residents of Next House. If this is a mistake, please contact the
+        NextRes team at <a href="mailto:nextres@mit.edu">nextres@mit.edu</a>.
+      </p>
+    </div>
+  </div>
+{% endblock %}
