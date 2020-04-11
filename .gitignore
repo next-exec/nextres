@@ -2,3 +2,6 @@ __pycache__/
 dist/
 node_modules/
 venv/
+
+.htaccess
+config.json
