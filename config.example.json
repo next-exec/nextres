@@ -1,4 +1,5 @@
 {
+  "database": "mysql+pymysql://mysql:mysql@localhost/mysql",
   "flask": {
     "root": "/"
   }
