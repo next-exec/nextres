@@ -21,6 +21,49 @@ class DiscordController:
                                            storage=SQLAlchemyStorage(OAuth, db.session, user=current_user))
         app.register_blueprint(blueprint)
 
+        @app.route('/discord', methods=['GET', 'POST'])
+        @login_required
+        @AuthController.instance.authorize.in_group('residents')
+        def account_discord():
+            if request.method == 'POST':
+                if '_method' in request.form and request.form['_method'] in ['PUT', 'DELETE']:
+                    if request.form['_method'] == 'PUT':
+                        join_guild()
+                    elif request.form['_method'] == 'DELETE':
+                        r = discord.post(
+                            "/api/oauth2/token/revoke",
+                            data={
+                                'client_id': app.config['DISCORD_CLIENT_ID'],
+                                'client_secret': app.config['DISCORD_CLIENT_SECRET'],
+                                'token': blueprint.token['access_token']
+                            },
+                            headers={"Content-Type": "application/x-www-form-urlencoded"}
+                        )
+                        if r.status_code == 200:
+                            r = delete('{}{}/members/{}'
+                                       .format(GUILDS_API, app.config['DISCORD_VERIFICATION_GUILD'],
+                                               current_user.discord_id),
+                                       headers=authorization)
+                        if r.status_code == 204:
+                            current_user.discord_id = None
+                            current_user.discord_username = None
+                            current_user.discord_discriminator = None
+                            db.session.commit()
+                            flash('Your Discord account has been disconnected successfully. To regain access to the '
+                                  'Next House Discord server, please connect another account.', FLASH_SUCCESS)
+                        else:
+                            flash('An error occurred while disconnecting your Discord account. Please wait a bit and '
+                                  'try again later. If this issue persists, please contact '
+                                  '<a href="mailto:next-techchair@mit.edu">next-techchair@mit.edu</a> for assistance.',
+                                  FLASH_ERROR)
+                        del blueprint.token
+                else:
+                    flash('The server received an invalid request. Please wait a bit and try again later. If this '
+                          'issue persists, please contact '
+                          '<a href="mailto:next-techchair@mit.edu">next-techchair@mit.edu</a> for assistance.',
+                          FLASH_ERROR)
+            return render_template('discord.html', authorized=discord.authorized)
+
         @oauth_authorized.connect_via(blueprint)
         def handle_authorized(_, token):
             join_guild()

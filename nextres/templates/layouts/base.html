@@ -40,6 +40,25 @@
                     <p>Home</p>
                   </a>
                 </li>
+
+                <li class="nav-item {% if request.endpoint.startswith('account_') %}menu-open{% endif %}">
+                  <a href="#" class="nav-link {% if request.endpoint.startswith('account_') %}active{% endif %}">
+                    <i class="nav-icon fas fa-user"></i>
+                    <p>
+                      Account
+                      <i class="right fas fa-angle-left"></i>
+                    </p>
+                  </a>
+
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                      <a href="{{ url_for('account_discord') }}" class="nav-link {% if request.endpoint.endswith('_discord') %}active{% endif %}">
+                        <i class="fab fa-discord nav-icon"></i>
+                        <p>Discord Integration</p>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
               </ul>
             </nav>
           </div>
