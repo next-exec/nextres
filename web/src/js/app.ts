@@ -4,3 +4,4 @@ import $ from 'jquery'
 (window as any).jQuery = $
 
 import 'admin-lte'
+import 'bootstrap'
