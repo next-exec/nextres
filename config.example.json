@@ -1,8 +1,0 @@
-{
-  "database": "mysql+pymysql://mysql:mysql@localhost/mysql",
-  "flask": {
-    "base": "",
-    "root": "/",
-    "secret": ""
-  }
-}

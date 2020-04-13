@@ -4,4 +4,4 @@ node_modules/
 venv/
 
 .htaccess
-config.json
+config.py
