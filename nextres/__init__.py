@@ -13,6 +13,7 @@ database = Database(app)
 
 # Initialize controllers.
 auth = AuthController(app)
+discord = DiscordController(app)
 
 
 @app.route('/')
