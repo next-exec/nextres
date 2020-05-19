@@ -1,6 +1,6 @@
 from flask_login import UserMixin
 
-from nextres.database.usergroup import UserGroup
+from nextres.database.models.usergroup import UserGroup
 from nextres.database.util import db
 
 

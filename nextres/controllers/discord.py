@@ -7,7 +7,8 @@ from requests import delete, put
 
 from nextres.constants import FLASH_ERROR, FLASH_SUCCESS
 from nextres.controllers.auth import AuthController
-from nextres.database.oauth import db, OAuth
+from nextres.database.models import OAuth
+from nextres.database import db
 
 GUILDS_API = 'https://discordapp.com/api/guilds/'
 

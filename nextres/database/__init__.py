@@ -1,6 +1,4 @@
-from nextres.database.group import Group
-from nextres.database.oauth import OAuth
-from nextres.database.user import User
+from nextres.database.models import *
 from nextres.database.util import db
 
 

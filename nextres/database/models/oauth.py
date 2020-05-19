@@ -1,6 +1,6 @@
 from flask_dance.consumer.storage.sqla import OAuthConsumerMixin
 
-from nextres.database.user import User
+from nextres.database.models.user import User
 from nextres.database.util import db
 
 
