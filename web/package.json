@@ -5,7 +5,7 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "@types/jquery": "^3.3.34",
+    "@types/jquery": "3.3.34",
     "tslint": "5.20.1",
     "tslint-config-standard": "9.0.0",
     "typescript": "3.7.4"
