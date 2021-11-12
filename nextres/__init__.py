@@ -14,6 +14,7 @@ database = Database(app)
 # Initialize controllers.
 auth = AuthController(app)
 discord = DiscordController(app)
+guestlist = GuestListController(app)
 
 
 @app.route('/')
