@@ -17,7 +17,7 @@ class DiscordController:
     def __init__(self, app):
         authorization = {'Authorization': 'Bot {}'.format(app.config['DISCORD_BOT_TOKEN'])}
         blueprint = make_discord_blueprint(app.config['DISCORD_CLIENT_ID'], app.config['DISCORD_CLIENT_SECRET'],
-                                           ['guilds.join', 'identify'], redirect_to='account_discord',
+                                           scope=['guilds.join', 'identify'], redirect_to='account_discord',
                                            login_url='/discord/login',
                                            storage=SQLAlchemyStorage(OAuth, db.session, user=current_user))
         app.register_blueprint(blueprint)
