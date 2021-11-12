@@ -13,3 +13,4 @@ class User(db.Model, UserMixin):
     discord_discriminator = db.Column(db.Integer)
 
     groups = db.relationship('Group', UserGroup)
+    guests = db.relationship('Guest', backref='host', lazy='dynamic', cascade='save-update, merge, delete, delete-orphan')
