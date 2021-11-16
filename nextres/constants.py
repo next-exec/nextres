@@ -1,2 +1,2 @@
-FLASH_ERROR = 'error'
+FLASH_ERROR = 'danger'
 FLASH_SUCCESS = 'success'
