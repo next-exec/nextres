@@ -74,7 +74,7 @@
                 {% for entry in existing %}
                   <div class="form-group">
                     {% if entry[2].startswith('kerberos') %}
-                      <input class="form-control is-invalid" maxlength="8" name="kerberoi" value="{{ entry[0] }}">
+                      <input class="form-control is-invalid" maxlength="8" pattern="[a-z0-9]*" title="lowercase letters and numbers only" name="kerberoi" value="{{ entry[0] }}">
                       <div class="invalid-feedback">
                         {{ entry[2] }}
                       </div>
@@ -87,12 +87,12 @@
                 {% for guest in desk %}
                   <div class="form-group">
                     <!-- imagine having consistency in *http implementations* -->
-                    <input class="form-control" maxlength="8" name="kerberoi" value="{{ guest.kerberos }}">
+                    <input class="form-control" maxlength="8" pattern="[a-z0-9]*" title="lowercase letters and numbers only" name="kerberoi" value="{{ guest.kerberos }}">
                   </div>
                 {% endfor %}
                 {% for _ in range(5 - desk | length) %}
                   <div class="form-group">
-                    <input class="form-control" maxlength="8" name="kerberoi">
+                    <input class="form-control" maxlength="8" pattern="[a-z0-9]*" title="lowercase letters and numbers only" name="kerberoi">
                   </div>
                 {% endfor %}
               {% endif %}

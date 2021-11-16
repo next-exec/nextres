@@ -42,6 +42,9 @@ class GuestListController:
                         if kerberos in duplicates:
                             entry[2] = 'kerberos must only be on a guest list once'
                             continue
+                        if not fullmatch('[a-z0-9]*', kerberos):
+                            entry[2] = 'kerberos must only contain lowercase letters and numbers'
+                            continue
                         guests.append(Guest(kerberos=kerberos, name=name, list_type=GuestListType.Desk))
                     if any(map(lambda entry: entry[2], entries)):
                         flash('An invalid guestlist was received. See below.', FLASH_ERROR)
