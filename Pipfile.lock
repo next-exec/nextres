@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "529c56aa15961b18e2df5a6b94bf923aec579d05f717945ee2dd6c8607f561f2"
+            "sha256": "1ea0a7fe4bca9a56feee6d2d5efd4cf26edf0c5a725729890bebe75ffce6366e"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -87,6 +87,14 @@
             "index": "pypi",
             "version": "==2.5.1"
         },
+        "flask-wtf": {
+            "hashes": [
+                "sha256:01feccfc395405cea48a3f36c23f0d766e2cc6fd2a5a065ad50ad3e5827ec797",
+                "sha256:872fbb17b5888bfc734edbdcf45bc08fb365ca39f69d25dc752465a455517b28"
+            ],
+            "index": "pypi",
+            "version": "==1.0.0"
+        },
         "greenlet": {
             "hashes": [
                 "sha256:00e44c8afdbe5467e4f7b5851be223be68adb4272f44696ee71fe46b7036a711",
@@ -140,7 +148,7 @@
                 "sha256:fa877ca7f6b48054f847b61d6fa7bed5cebb663ebc55e018fda12db09dcc664c",
                 "sha256:fdcec0b8399108577ec290f55551d926d9a1fa6cad45882093a7a07ac5ec147b"
             ],
-            "markers": "python_version >= '3' and (platform_machine == 'aarch64' or (platform_machine == 'ppc64le' or (platform_machine == 'x86_64' or (platform_machine == 'amd64' or (platform_machine == 'AMD64' or (platform_machine == 'win32' or platform_machine == 'WIN32'))))))",
+            "markers": "python_version >= '3' and platform_machine == 'aarch64' or (platform_machine == 'ppc64le' or (platform_machine == 'x86_64' or (platform_machine == 'amd64' or (platform_machine == 'AMD64' or (platform_machine == 'win32' or platform_machine == 'WIN32')))))",
             "version": "==1.1.2"
         },
         "idna": {
@@ -279,7 +287,7 @@
                 "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926",
                 "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==1.16.0"
         },
         "sqlalchemy": {
@@ -353,6 +361,14 @@
             ],
             "markers": "python_version >= '3.6'",
             "version": "==2.0.2"
+        },
+        "wtforms": {
+            "hashes": [
+                "sha256:232dbb0094847dca2f45c72136b5ca1d5dca2a3e24ccd2229823b8b74b3c6698",
+                "sha256:4abfbaa1d529a1d0ac927d44af8dbb9833afd910e56448a103f1893b0b176886"
+            ],
+            "markers": "python_version >= '3.6'",
+            "version": "==3.0.0"
         }
     },
     "develop": {}

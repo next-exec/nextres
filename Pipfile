@@ -12,6 +12,7 @@ Flask-Login = "*"
 Flask-SQLAlchemy = "*"
 PyMySQL = "*"
 SQLAlchemy-Utils = "*"
+flask-wtf = "*"
 
 [dev-packages]
 
