@@ -77,6 +77,8 @@ class DiscordController:
             return render_template('discord.html', authorized=discord.authorized)
 
         @oauth_authorized.connect_via(blueprint)
+        @login_required
+        @AuthController.instance.authorize.in_group('residents')
         def handle_authorized(_, token):
             join_guild()
 
