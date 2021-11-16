@@ -41,6 +41,13 @@
                   </a>
                 </li>
 
+                <li class="nav-item">
+                  <a href="{{ url_for('guestlist') }}"  class="nav-link {% if request.endpoint == 'guestlist' %}active{% endif %}">
+                    <i class="fas fa-list nav-icon"></i>
+                    <p>Guest List</p>
+                  </a>
+                </li>
+
                 <li class="nav-item {% if request.endpoint.startswith('account_') %}menu-open{% endif %}">
                   <a href="#" class="nav-link {% if request.endpoint.startswith('account_') %}active{% endif %}">
                     <i class="nav-icon fas fa-user"></i>
