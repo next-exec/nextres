@@ -66,6 +66,7 @@
       <div class="card-body">
         <form method="post">
           <p>Front desk guests can be managed at any time, but must be verified by a desk worker every time they visit Next House.</p>
+	  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
           <div class="row">
             <div class="col-md-6">
               <label>Kerberos</label>

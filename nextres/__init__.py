@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from flask_login import login_required
+from flask_wtf.csrf import CSRFProtect
 
 from nextres.controllers import *
 from nextres.database import Database
@@ -7,6 +8,9 @@ from nextres.database import Database
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 app.config.update(SQLALCHEMY_TRACK_MODIFICATIONS=True)
+
+# csrf protection
+csrf = CSRFProtect(app)
 
 # Initialize database.
 database = Database(app)
