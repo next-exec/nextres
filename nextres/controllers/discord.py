@@ -3,6 +3,7 @@ from flask_dance.consumer import oauth_authorized
 from flask_dance.consumer.storage.sqla import SQLAlchemyStorage
 from flask_dance.contrib.discord import discord, make_discord_blueprint
 from flask_login import current_user, login_required
+from oauthlib.oauth2.rfc6749.errors import TokenExpiredError
 from requests import delete, put
 
 from nextres.constants import FLASH_ERROR, FLASH_SUCCESS
@@ -31,27 +32,37 @@ class DiscordController:
                     if request.form['_method'] == 'PUT':
                         join_guild()
                     elif request.form['_method'] == 'DELETE':
-                        r = discord.post(
-                            "/api/oauth2/token/revoke",
-                            data={
-                                'client_id': app.config['DISCORD_CLIENT_ID'],
-                                'client_secret': app.config['DISCORD_CLIENT_SECRET'],
-                                'token': blueprint.token['access_token']
-                            },
-                            headers={"Content-Type": "application/x-www-form-urlencoded"}
-                        )
-                        if r.status_code == 200:
+                        status_code = 200
+                        try:
+                            r = discord.post(
+                                "/api/oauth2/token/revoke",
+                                data={
+                                    'client_id': app.config['DISCORD_CLIENT_ID'],
+                                    'client_secret': app.config['DISCORD_CLIENT_SECRET'],
+                                    'token': blueprint.token['access_token']
+                                },
+                                headers={"Content-Type": "application/x-www-form-urlencoded"}
+                            )
+                            status_code = r.status_code
+                        except TokenExpiredError as e:
+                            pass
+                        if status_code == 200:
                             r = delete('{}{}/members/{}'
                                        .format(GUILDS_API, app.config['DISCORD_VERIFICATION_GUILD'],
                                                current_user.discord_id),
                                        headers=authorization)
-                        if r.status_code == 204:
-                            current_user.discord_id = None
-                            current_user.discord_username = None
-                            current_user.discord_discriminator = None
-                            db.session.commit()
-                            flash('Your Discord account has been disconnected successfully. To regain access to the '
-                                  'Next House Discord server, please connect another account.', FLASH_SUCCESS)
+                            if r.status_code == 204:
+                                current_user.discord_id = None
+                                current_user.discord_username = None
+                                current_user.discord_discriminator = None
+                                db.session.commit()
+                                flash('Your Discord account has been disconnected successfully. To regain access to the '
+                                      'Next House Discord server, please connect another account.', FLASH_SUCCESS)
+                            else:
+                                flash('An error occurred while disconnecting your Discord account. Please wait a bit and '
+                                      'try again later. If this issue persists, please contact '
+                                      '<a href="mailto:next-techchair@mit.edu">next-techchair@mit.edu</a> for assistance.',
+                                      FLASH_ERROR)
                         else:
                             flash('An error occurred while disconnecting your Discord account. Please wait a bit and '
                                   'try again later. If this issue persists, please contact '
@@ -70,7 +81,12 @@ class DiscordController:
             join_guild()
 
         def join_guild():
-            user = discord.get('/api/users/@me').json()
+            try:
+                # scope is actually such a cursed concept
+                user = discord.get('/api/users/@me').json()
+            except TokenExpiredError as e:
+                flash('Your Discord token has expired. Please disconnnect and re-authenticate.', FLASH_ERROR)
+                return
 
             if not current_user.discord_id:
                 current_user.discord_id = user['id']
