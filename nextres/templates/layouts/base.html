@@ -61,7 +61,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
                 </li>
 
                 <li class="nav-item">
-                  <a href="{{ url_for('guestlist_edit') }}"  class="nav-link {% if request.endpoint == 'guestlist' %}active{% endif %}">
+                  <a href="{{ url_for('guestlist_edit') }}"  class="nav-link {% if request.endpoint in ['guestlist_edit', 'guestlist_update'] %}active{% endif %}">
                     <i class="fas fa-list nav-icon"></i>
                     <p>Guest List</p>
                   </a>
@@ -78,7 +78,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
 
                   <ul class="nav nav-treeview">
                     <li class="nav-item">
-                      <a href="{{ url_for('account_discord') }}" class="nav-link {% if request.endpoint.endswith('_discord') %}active{% endif %}">
+                      <a href="{{ url_for('account_discord_index') }}" class="nav-link {% if request.endpoint.startswith('account_discord_') %}active{% endif %}">
                         <i class="fab fa-discord nav-icon"></i>
                         <p>Discord Integration</p>
                       </a>
