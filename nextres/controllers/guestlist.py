@@ -21,6 +21,7 @@ from requests import get
 from nextres.constants import FLASH_ERROR, FLASH_SUCCESS
 from nextres.controllers.auth import AuthController
 from nextres.database import db
+from nextres.database.models import User
 from nextres.database.models.guest import Guest, GuestListType
 
 from re import fullmatch
@@ -32,10 +33,16 @@ class GuestListController:
             'client_secret': app.config['PEOPLE_API_CLIENT_SECRET']
         }
 
-        @app.route('/guestlist', methods=['GET', 'POST'])
+        @app.route('/guestlists', methods=['GET'])
+        @login_required
+        @AuthController.instance.authorize.in_group('desk_workers')
+        def guestlist_index():
+            return render_template('guestlists/index.html', residents=User.query.filter(User.groups.any(name='residents')).all(), list_type=GuestListType.Desk)
+
+        @app.route('/guestlists/me', methods=['GET', 'POST'])
         @login_required
         @AuthController.instance.authorize.in_group('residents')
-        def guestlist():
+        def guestlist_edit():
             entries = []
             if request.method == 'POST':
                 form = request.form
