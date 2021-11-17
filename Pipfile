@@ -20,4 +20,5 @@ flask-wtf = "*"
 python_version = "3.9"
 
 [scripts]
+cli = "python -m nextres"
 serve = "env FLASK_APP=nextres FLASK_ENV=development OAUTHLIB_INSECURE_TRANSPORT=true python -m flask run"
