@@ -14,8 +14,26 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>
 
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
+
+from nextres.config import SQLALCHEMY_DATABASE_URI
 from nextres.database.models import *
-from nextres.database.util import db, first_or_instance
+from nextres.database.util import db, first_or_instance, metadata
+
+
+class CLIDatabase:
+    def __init__(self):
+        engine = create_engine(SQLALCHEMY_DATABASE_URI)
+        metadata.create_all(engine)
+        self.__session = Session(engine)
+        create_groups(self.__session)
+
+    def __enter__(self):
+        return self.__session
+
+    def __exit__(self, exc_type, value, traceback):
+        self.__session.close()
 
 
 class FlaskDatabase:
