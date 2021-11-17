@@ -25,7 +25,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
         <div class="content">
           <div class="container">
             <div class="row">
-              <div class="col-md-12">{% block content %}{% endblock %}</div>
+              <div class="col-md-12">
+                <div class="card card-{% block level %}{% endblock %}">
+                  <div class="card-header">
+                    <h3 class="card-title">{{ title }}</h3>
+                  </div>
+                  <div class="card-body">
+                    {% block content %}{% endblock %}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
