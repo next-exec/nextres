@@ -39,12 +39,12 @@ class GuestListController:
         def guestlist_index():
             return render_template('guestlists/index.html', residents=db.session.query(User).filter(User.groups.any(name='residents')).all(), list_type=GuestListType.Desk)
 
-        @app.route('/guestlists/me', methods=['GET', 'POST'])
+        @app.route('/guestlists/me', methods=['GET', 'PUT'])
         @login_required
         @AuthController.instance.authorize.in_group('residents')
         def guestlist_edit():
             entries = []
-            if request.method == 'POST':
+            if request.method == 'PUT':
                 form = request.form
                 kerberoi = form.getlist('kerberoi')
                 # jank. jank. jank. jank. jank.
