@@ -83,7 +83,7 @@ class GuestListController:
                         current_user.guests = guests
                         db.session.commit()
                         flash('Guest list updated successfully!', FLASH_SUCCESS)
-            return render_template('guestlist.html',
+            return render_template('guestlists/edit.html',
                                    existing=entries,
                                    desk=current_user.guests.filter_by(list_type=GuestListType.Desk).all(),
                                    express=current_user.guests.filter_by(list_type=GuestListType.Express).all())
