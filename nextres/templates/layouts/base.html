@@ -19,9 +19,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
 <html lang="en">
   <head>
     <title>{% block title %}{% endblock %} - Next House Resident Dashboard</title>
-    <link href="/static/img/favicon.ico" rel="icon">
-    <link href="/static/css/app.css" rel="stylesheet">
-    <script src="/static/js/app.js"></script>
+    <link href="{{ url_for('static', filename='img/favicon.ico') }}" rel="icon">
+    <link href="{{ url_for('static', filename='css/app.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
   </head>
 
   <body class="layout-navbar-fixed layout-fixed">
@@ -43,7 +43,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
           <div class="sidebar sidebar-dark-primary">
             <div class="user-panel mt-3 mb-3 pb-3 d-flex">
               <div class="image">
-                <img src="static/img/user.png" alt="User Image" class="img-circle">
+                <img src="{{ url_for('static', filename='img/user.png') }}" alt="User Image" class="img-circle">
               </div>
 
               <div class="info">
