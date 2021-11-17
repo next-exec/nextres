@@ -14,8 +14,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>
 
+from sqlalchemy import Column, Enum as SQLEnum, ForeignKey, String
+
 from nextres.database.models.user import User
-from nextres.database.util import db
+from nextres.database.util import Base
 
 from enum import Enum
 
@@ -23,9 +25,9 @@ class GuestListType(Enum):
     Desk = 1
     Express = 2
 
-class Guest(db.Model):
+class Guest(Base):
     __tablename__ = 'guests'
-    host_kerberos = db.Column(db.String(8), db.ForeignKey(User.kerberos), primary_key=True)
-    kerberos = db.Column(db.String(8), primary_key=True)
-    name = db.Column(db.String(255), nullable=False)
-    list_type = db.Column(db.Enum(GuestListType), nullable=False)
+    host_kerberos = Column(String(8), ForeignKey(User.kerberos), primary_key=True)
+    kerberos = Column(String(8), primary_key=True)
+    name = Column(String(255), nullable=False)
+    list_type = Column(SQLEnum(GuestListType), nullable=False)

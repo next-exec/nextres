@@ -37,7 +37,7 @@ class GuestListController:
         @login_required
         @AuthController.instance.authorize.in_group('desk_workers')
         def guestlist_index():
-            return render_template('guestlists/index.html', residents=User.query.filter(User.groups.any(name='residents')).all(), list_type=GuestListType.Desk)
+            return render_template('guestlists/index.html', residents=db.session.query(User).filter(User.groups.any(name='residents')).all(), list_type=GuestListType.Desk)
 
         @app.route('/guestlists/me', methods=['GET', 'POST'])
         @login_required

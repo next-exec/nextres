@@ -19,8 +19,8 @@ from flask_authorize import Authorize
 from flask_login import LoginManager
 from werkzeug.exceptions import Unauthorized
 
-from nextres.database import User
-from nextres.database.util import first_or_instance
+from nextres.database import Group, User
+from nextres.database.util import db, first_or_instance
 
 from os import getenv
 
@@ -47,4 +47,4 @@ class AuthController:
         def load_kerberos(_):
             email = getenv('SSL_CLIENT_S_DN_Email')
             if email:
-                return first_or_instance(User, kerberos=email.split('@')[0])
+                return first_or_instance(db.session, User, kerberos=email.split('@')[0])

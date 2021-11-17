@@ -15,12 +15,17 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>
 
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import MetaData
+from sqlalchemy.ext.declarative import declarative_base
 
-db = SQLAlchemy()
+metadata = MetaData()
+Base = declarative_base(metadata=metadata)
+db = SQLAlchemy(metadata=metadata)
 
-
-def first_or_instance(model, **kwargs):
-    instance = model.query.filter_by(**kwargs).first()
+def first_or_instance(session, model, **kwargs):
+    instance = session.query(model).filter_by(**kwargs).first()
     if not instance:
         instance = model(**kwargs)
+        session.add(instance)
+        session.commit()
     return instance

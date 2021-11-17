@@ -15,11 +15,13 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>
 
 from flask_dance.consumer.storage.sqla import OAuthConsumerMixin
+from sqlalchemy import Column, ForeignKey, String
+from sqlalchemy.orm import relationship
 
 from nextres.database.models.user import User
-from nextres.database.util import db
+from nextres.database.util import Base
 
 
-class OAuth(db.Model, OAuthConsumerMixin):
-    kerberos = db.Column(db.String(8), db.ForeignKey(User.kerberos))
-    user = db.relationship(User)
+class OAuth(Base, OAuthConsumerMixin):
+    kerberos = Column(String(8), ForeignKey(User.kerberos))
+    user = relationship(User)

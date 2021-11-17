@@ -15,10 +15,11 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>
 
 from flask_authorize import AllowancesMixin
+from sqlalchemy import Column, String
 
-from nextres.database.util import db
+from nextres.database.util import Base
 
 
-class Group(db.Model, AllowancesMixin):
+class Group(Base, AllowancesMixin):
     __tablename__ = 'groups'
-    name = db.Column(db.String(255), primary_key=True)
+    name = Column(String(255), primary_key=True)

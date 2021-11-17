@@ -14,8 +14,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>
 
-from nextres.database.util import db
+from sqlalchemy import Column, ForeignKey, String, Table
 
-UserGroup = db.Table('user_group', db.Model.metadata,
-                     db.Column('kerberos', db.String(8), db.ForeignKey('users.kerberos')),
-                     db.Column('group', db.String(255), db.ForeignKey('groups.name')))
+from nextres.database.util import metadata
+
+UserGroup = Table('user_group', metadata,
+                     Column('kerberos', String(8), ForeignKey('users.kerberos')),
+                     Column('group', String(255), ForeignKey('groups.name')))

@@ -15,18 +15,20 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>
 
 from flask_login import UserMixin
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
 
 from nextres.database.models.usergroup import UserGroup
-from nextres.database.util import db
+from nextres.database.util import Base
 
 
-class User(db.Model, UserMixin):
+class User(Base, UserMixin):
     __tablename__ = 'users'
-    kerberos = db.Column(db.String(8), primary_key=True)
+    kerberos = Column(String(8), primary_key=True)
 
-    discord_id = db.Column(db.String(32))
-    discord_username = db.Column(db.String(32))
-    discord_discriminator = db.Column(db.Integer)
+    discord_id = Column(String(32))
+    discord_username = Column(String(32))
+    discord_discriminator = Column(Integer)
 
-    groups = db.relationship('Group', UserGroup)
-    guests = db.relationship('Guest', backref='host', lazy='dynamic', cascade='save-update, merge, delete, delete-orphan')
+    groups = relationship('Group', UserGroup)
+    guests = relationship('Guest', backref='host', lazy='dynamic', cascade='save-update, merge, delete, delete-orphan')

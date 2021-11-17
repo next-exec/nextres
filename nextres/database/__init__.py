@@ -18,7 +18,7 @@ from nextres.database.models import *
 from nextres.database.util import db
 
 
-class Database:
+class FlaskDatabase:
     def __init__(self, app):
         db.init_app(app)
         with app.app_context():
