@@ -23,7 +23,8 @@ from nextres.database import FlaskDatabase
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
-app.config.update(SQLALCHEMY_TRACK_MODIFICATIONS=True)
+# we don't actually use AUTHORIZE_IGNORE_PROPERTY, but flask-authorize is dumb and crashes without it
+app.config.update(AUTHORIZE_IGNORE_PROPERTY='', SQLALCHEMY_TRACK_MODIFICATIONS=True)
 
 # csrf protection
 csrf = CSRFProtect(app)

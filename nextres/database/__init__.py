@@ -15,7 +15,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>
 
 from nextres.database.models import *
-from nextres.database.util import db
+from nextres.database.util import db, first_or_instance
 
 
 class FlaskDatabase:
@@ -23,3 +23,9 @@ class FlaskDatabase:
         db.init_app(app)
         with app.app_context():
             db.create_all()
+            create_groups(db.session)
+
+
+def create_groups(session):
+    first_or_instance(session, Group, name='residents')
+    first_or_instance(session, Group, name='desk_workers')
