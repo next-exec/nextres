@@ -26,6 +26,7 @@ from nextres.constants import FLASH_ERROR, FLASH_SUCCESS
 from nextres.controllers.auth import AuthController
 from nextres.database.models import OAuth
 from nextres.database import db
+from nextres.util import ResponseContext
 
 GUILDS_API = 'https://discordapp.com/api/guilds/'
 
@@ -56,7 +57,9 @@ class DiscordController:
         @login_required
         @AuthController.instance.authorize.in_group('residents')
         def account_discord_delete():
-            status_code = 200
+            ctx = ResponseContext('discord.html', {
+                'authorized': discord.authorized
+            })
             try:
                 r = discord.post(
                     "/api/oauth2/token/revoke",
@@ -67,33 +70,33 @@ class DiscordController:
                     },
                     headers={"Content-Type": "application/x-www-form-urlencoded"}
                 )
-                status_code = r.status_code
-            except TokenExpiredError as e:
-                pass
-            if status_code == 200:
-                r = delete('{}{}/members/{}'
-                           .format(GUILDS_API, app.config['DISCORD_VERIFICATION_GUILD'],
-                                   current_user.discord_id),
-                           headers=authorization)
-                if r.status_code == 204:
-                    current_user.discord_id = None
-                    current_user.discord_username = None
-                    current_user.discord_discriminator = None
-                    db.session.commit()
-                    flash('Your Discord account has been disconnected successfully. To regain access to the '
-                          'Next House Discord server, please connect another account.', FLASH_SUCCESS)
-                else:
+                if r.statuscode != 200:
                     flash('An error occurred while disconnecting your Discord account. Please wait a bit and '
                           'try again later. If this issue persists, please contact '
                           '<a href="mailto:next-techchair@mit.edu">next-techchair@mit.edu</a> for assistance.',
                           FLASH_ERROR)
+                    return ctx.return_response()
+            except TokenExpiredError as e:
+                pass
+            del blueprint.token
+            r = delete('{}{}/members/{}'
+                       .format(GUILDS_API, app.config['DISCORD_VERIFICATION_GUILD'],
+                               current_user.discord_id),
+                       headers=authorization)
+            if r.status_code == 204:
+                current_user.discord_id = None
+                current_user.discord_username = None
+                current_user.discord_discriminator = None
+                db.session.commit()
+                flash('Your Discord account has been disconnected successfully. To regain access to the '
+                      'Next House Discord server, please connect another account.', FLASH_SUCCESS)
+                return ctx.return_response()
             else:
                 flash('An error occurred while disconnecting your Discord account. Please wait a bit and '
                       'try again later. If this issue persists, please contact '
                       '<a href="mailto:next-techchair@mit.edu">next-techchair@mit.edu</a> for assistance.',
                       FLASH_ERROR)
-            del blueprint.token
-            return render_template('discord.html', authorized=discord.authorized)
+                return ctx.return_response()
 
         @oauth_authorized.connect_via(blueprint)
         @login_required

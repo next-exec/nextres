@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>
 
-from flask import Request
+from flask import render_template, Request
 from werkzeug.exceptions import BadRequest
 from werkzeug.formparser import parse_form_data
 
@@ -53,3 +53,14 @@ class WrappedFormRequest(Request):
         if 'wsgi._post_form' in self.environ:
             return self.environ['wsgi._post_form']
         return super().form
+
+class ResponseContext:
+    def __init__(self, template, ctx):
+        self.template = template
+        self.ctx = ctx
+
+    def __setitem__(self, key, value):
+        self.ctx[key] = value
+
+    def return_response(self):
+        return render_template(self.template, **self.ctx)
