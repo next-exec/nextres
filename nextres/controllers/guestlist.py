@@ -79,8 +79,7 @@ class GuestListController:
                         # f-strings don't appear until python 3.6. scripts is stuck on python 3.3.
                         r = get('https://mit-people-v3.cloudhub.io/people/v3/people/{}'.format(kerberos), headers=authorization)
                         data = r.json()
-                        affiliation = data['item']['affiliations'][0]
-                        if r.status_code != 200 or affiliation['type'] != 'student' or affiliation['classYear'] == 'G':
+                        if r.status_code != 200 or data['item']['affiliations'][0]['type'] != 'student' or data['item']['affiliations'][0]['classYear'] == 'G':
                             entry[2] = 'kerberos must belong to a current mit undergrad'
                             continue
                         guests.append(Guest(kerberos=kerberos, name=name, list_type=GuestListType.Desk))
