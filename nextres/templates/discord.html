@@ -16,69 +16,53 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>
 #}
 
-{% extends "layouts/base.html" %}
-{% block title %}Discord Integration{% endblock %}
+{% extends "layouts/page.html" %}
+{% set title %}Discord Integration{% endset %}
 {% block content %}
-  <div class="content-header">
-    <h1>Discord Integration</h1>
-  </div>
-  <div class="content">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% for category, message in messages %}
-        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-          {{ message }}
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-      {% endfor %}
-    {% endwith %}
+  <p>To gain access to the Next House Discord server, please link your Discord account.</p>
 
-    <p>To gain access to the Next House Discord server, please link your Discord account.</p>
-
-    {% if authorized %}
-      <div class="card card-success">
-        <div class="card-header">
-          <h3 class="card-title">Account Connected</h3>
-        </div>
-        <div class="card-body">
-          <p>
-            The following Discord account is connected to your NextRes account:
-            <b>{{ current_user.discord_username }}#{{ '%04d' | format(current_user.discord_discriminator) }}</b>
-          </p>
-          <hr>
-          <form method="post">
-            <p>
-              If you lost access to the Discord server for whatever reason, click the button below to regain access.
-            </p>
-            <input type="hidden" name="_method" value="PUT">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <input type="submit" class="btn btn-primary" value="Rejoin">
-          </form>
-          <hr>
-          <form method="post">
-            <p>
-              To disconnect your Discord account, click the button below.
-              <b>This will revoke your access to the Discord server.</b>
-            </p>
-            <input type="hidden" name="_method" value="DELETE">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <input type="submit" class="btn btn-danger" value="Disconnect">
-          </form>
-        </div>
+  {% if authorized %}
+    <div class="card card-success">
+      <div class="card-header">
+        <h3 class="card-title">Account Connected</h3>
       </div>
-    {% else %}
-      <div class="card card-warning">
-        <div class="card-header">
-          <h3 class="card-title">Account Not Connected</h3>
-        </div>
-        <div class="card-body">
+      <div class="card-body">
+        <p>
+          The following Discord account is connected to your NextRes account:
+          <b>{{ current_user.discord_username }}#{{ '%04d' | format(current_user.discord_discriminator) }}</b>
+        </p>
+        <hr>
+        <form method="post">
           <p>
-            Please click the button below to connect your Discord account.
+            If you lost access to the Discord server for whatever reason, click the button below to regain access.
           </p>
-          <a class="btn btn-primary" href="/discord/login">Connect</a>
-        </div>
+          <input type="hidden" name="_method" value="PUT">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <input type="submit" class="btn btn-primary" value="Rejoin">
+        </form>
+        <hr>
+        <form method="post">
+          <p>
+            To disconnect your Discord account, click the button below.
+            <b>This will revoke your access to the Discord server.</b>
+          </p>
+          <input type="hidden" name="_method" value="DELETE">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <input type="submit" class="btn btn-danger" value="Disconnect">
+        </form>
       </div>
-    {% endif %}
-  </div>
+    </div>
+  {% else %}
+    <div class="card card-warning">
+      <div class="card-header">
+        <h3 class="card-title">Account Not Connected</h3>
+      </div>
+      <div class="card-body">
+        <p>
+          Please click the button below to connect your Discord account.
+        </p>
+        <a class="btn btn-primary" href="/discord/login">Connect</a>
+      </div>
+    </div>
+  {% endif %}
 {% endblock %}

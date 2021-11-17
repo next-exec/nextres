@@ -16,138 +16,122 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>
 #}
 
-{% extends "layouts/base.html" %}
-{% block title %}My Guest List{% endblock %}
+{% extends "layouts/page.html" %}
+{% set title %}Edit Guest List{% endset %}
 {% block content %}
-  <div class="content-header">
-    <h1>Manage Guest List</h1>
-  </div>
-  <div class="content">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% for category, message in messages %}
-        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-          {{ message }}
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+  <p>
+    Guests must be MIT undergraduate students. For more details about the guestlist policy, please check the
+    <a href="http://studentlife.mit.edu/studentlife.mit.edu/reslifeanddining/news/residencehallsecurity">MIT security policies</a>.
+  </p>
+  <p>If you are having trouble adding someone to your guestlist, please email <a href="mailto:nextres@mit.edu">nextres@mit.edu</a> with the guest's full name and kerberos.</p>
+
+  <div class="card card-success">
+    <div class="card-header">
+      <h3 class="card-title">Express Guests</h3>
+    </div>
+    <div class="card-body">
+      <p>Express guests can only be managed once a semester by contacting Next Exec, and can tap in without a desk worker.</p>
+      <div class="row">
+        <div class="col-md-6">
+          <label>Kerberos</label>
+          {% for guest in express %}
+            <div class="form-group">
+              <input class="form-control" readonly>
+            </div>
+          {% endfor %}
+          {% for _ in range(3 - express | length) %}
+            <div class="form-group">
+              <input class="form-control" readonly>
+            </div>
+          {% endfor %}
         </div>
-      {% endfor %}
-    {% endwith %}
-
-    <p>
-      Guests must be MIT undergraduate students. For more details about the guestlist policy, please check the
-      <a href="http://studentlife.mit.edu/studentlife.mit.edu/reslifeanddining/news/residencehallsecurity">MIT security policies</a>.
-    </p>
-    <p>If you are having trouble adding someone to your guestlist, please email <a href="mailto:nextres@mit.edu">nextres@mit.edu</a> with the guest's full name and kerberos.</p>
-
-    <div class="card card-success">
-      <div class="card-header">
-        <h3 class="card-title">Express Guests</h3>
-      </div>
-      <div class="card-body">
-        <p>Express guests can only be managed once a semester by contacting Next Exec, and can tap in without a desk worker.</p>
-        <div class="row">
-          <div class="col-md-6">
-            <label>Kerberos</label>
-            {% for guest in express %}
-              <div class="form-group">
-                <input class="form-control" readonly>
-              </div>
-            {% endfor %}
-            {% for _ in range(3 - express | length) %}
-              <div class="form-group">
-                <input class="form-control" readonly>
-              </div>
-            {% endfor %}
-          </div>
-          <div class="col-md-6">
-            <label>Full Name</label>
-            {% for guest in express %}
-              <div class="form-group">
-                <input class="form-control" readonly>
-              </div>
-            {% endfor %}
-            {% for _ in range(3 - express | length) %}
-              <div class="form-group">
-                <input class="form-control" readonly>
-              </div>
-            {% endfor %}
-          </div>
+        <div class="col-md-6">
+          <label>Full Name</label>
+          {% for guest in express %}
+            <div class="form-group">
+              <input class="form-control" readonly>
+            </div>
+          {% endfor %}
+          {% for _ in range(3 - express | length) %}
+            <div class="form-group">
+              <input class="form-control" readonly>
+            </div>
+          {% endfor %}
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="card card-info">
-      <div class="card-header">
-        <h3 class="card-title">Front Desk Guests</h3>
-      </div>
-      <div class="card-body">
-        <form method="post">
-          <p>Front desk guests can be managed at any time, but must be verified by a desk worker every time they visit Next House.</p>
-          <input type="hidden" name="_method" value="PUT">
-          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-          <div class="row">
-            <div class="col-md-6">
-              <label>Kerberos</label>
-              {% if existing %}
-                {% for entry in existing %}
-                  <div class="form-group">
-                    {% if entry[2].startswith('kerberos') %}
-                      <input class="form-control is-invalid" maxlength="8" pattern="[a-z0-9]*" title="lowercase letters and numbers only" name="kerberoi" value="{{ entry[0] }}">
-                      <div class="invalid-feedback">
-                        {{ entry[2] }}
-                      </div>
-                    {% else %}
-                      <input class="form-control" maxlength="8" name="kerberoi" value="{{ entry[0] }}">
-                    {% endif %}
-                  </div>
-                {% endfor %}
-              {% else %}
-                {% for guest in desk %}
-                  <div class="form-group">
-                    <!-- imagine having consistency in *http implementations* -->
-                    <input class="form-control" maxlength="8" pattern="[a-z0-9]*" title="lowercase letters and numbers only" name="kerberoi" value="{{ guest.kerberos }}">
-                  </div>
-                {% endfor %}
-                {% for _ in range(5 - desk | length) %}
-                  <div class="form-group">
-                    <input class="form-control" maxlength="8" pattern="[a-z0-9]*" title="lowercase letters and numbers only" name="kerberoi">
-                  </div>
-                {% endfor %}
-              {% endif %}
-            </div>
-            <div class="col-md-6">
-              <label>Full Name</label>
-              {% if existing %}
-                {% for entry in existing %}
-                  <div class="form-group">
-                    {% if entry[2].startswith('name') %}
-                      <input class="form-control is-invalid" maxlength="255" name="names" value="{{ entry[1] }}">
-                      <div class="invalid-feedback">
-                        {{ entry[2] }}
-                      </div>
-                    {% else %}
-                      <input class="form-control" maxlength="255" name="names" value="{{ entry[1] }}">
-                    {% endif %}
-                  </div>
-                {% endfor %}
-              {% else %}
-                {% for guest in desk %}
-                  <div class="form-group">
-                    <input class="form-control" maxlength="255" name="names" value="{{ guest.name }}">
-                  </div>
-                {% endfor %}
-                {% for _ in range(5 - desk | length) %}
-                  <div class="form-group">
-                    <input class="form-control" maxlength="255" name="names">
-                  </div>
-                {% endfor %}
-              {% endif %}
-            </div>
+  <div class="card card-info">
+    <div class="card-header">
+      <h3 class="card-title">Front Desk Guests</h3>
+    </div>
+    <div class="card-body">
+      <form method="post">
+        <p>Front desk guests can be managed at any time, but must be verified by a desk worker every time they visit Next House.</p>
+        <input type="hidden" name="_method" value="PUT">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="row">
+          <div class="col-md-6">
+            <label>Kerberos</label>
+            {% if existing %}
+              {% for entry in existing %}
+                <div class="form-group">
+                  {% if entry[2].startswith('kerberos') %}
+                    <input class="form-control is-invalid" maxlength="8" pattern="[a-z0-9]*" title="lowercase letters and numbers only" name="kerberoi" value="{{ entry[0] }}">
+                    <div class="invalid-feedback">
+                      {{ entry[2] }}
+                    </div>
+                  {% else %}
+                    <input class="form-control" maxlength="8" name="kerberoi" value="{{ entry[0] }}">
+                  {% endif %}
+                </div>
+              {% endfor %}
+            {% else %}
+              {% for guest in desk %}
+                <div class="form-group">
+                  <!-- imagine having consistency in *http implementations* -->
+                  <input class="form-control" maxlength="8" pattern="[a-z0-9]*" title="lowercase letters and numbers only" name="kerberoi" value="{{ guest.kerberos }}">
+                </div>
+              {% endfor %}
+              {% for _ in range(5 - desk | length) %}
+                <div class="form-group">
+                  <input class="form-control" maxlength="8" pattern="[a-z0-9]*" title="lowercase letters and numbers only" name="kerberoi">
+                </div>
+              {% endfor %}
+            {% endif %}
           </div>
-          <input type="submit" class="btn btn-primary" value="Update">
-        </form>
-      </div>
+          <div class="col-md-6">
+            <label>Full Name</label>
+            {% if existing %}
+              {% for entry in existing %}
+                <div class="form-group">
+                  {% if entry[2].startswith('name') %}
+                    <input class="form-control is-invalid" maxlength="255" name="names" value="{{ entry[1] }}">
+                    <div class="invalid-feedback">
+                      {{ entry[2] }}
+                    </div>
+                  {% else %}
+                    <input class="form-control" maxlength="255" name="names" value="{{ entry[1] }}">
+                  {% endif %}
+                </div>
+              {% endfor %}
+            {% else %}
+              {% for guest in desk %}
+                <div class="form-group">
+                  <input class="form-control" maxlength="255" name="names" value="{{ guest.name }}">
+                </div>
+              {% endfor %}
+              {% for _ in range(5 - desk | length) %}
+                <div class="form-group">
+                  <input class="form-control" maxlength="255" name="names">
+                </div>
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+        <input type="submit" class="btn btn-primary" value="Update">
+      </form>
     </div>
   </div>
 {% endblock %}

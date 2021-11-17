@@ -16,13 +16,8 @@ You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>
 #}
 
-<html lang="en">
-  <head>
-    <title>{% block title %}{% endblock %} - Next House Resident Dashboard</title>
-    <link href="/static/css/app.css" rel="stylesheet">
-    <script src="/static/js/app.js"></script>
-  </head>
-
+{% extends "layouts/base.html" %}
+{% block body %}
   <body class="layout-top-nav">
     <div class="wrapper">
       <div class="content-wrapper" style="min-height: 100vh">
@@ -37,4 +32,4 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
       </div>
     </div>
   </body>
-</html>
+{% endblock %}
