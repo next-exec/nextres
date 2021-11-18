@@ -15,24 +15,20 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>
 
 from nextres import app
+from nextres.constants import HIERARCHY
 from nextres.database import CLIDatabase
 from nextres.database.models import Group, User
 from nextres.database.util import first_or_instance
+from nextres.util import set_group
 
 from argparse import ArgumentParser
-
-HIERARCHY=['next_exec', 'desk_captains', 'desk_workers', 'residents']
 
 def assign(args):
     # needed because of flask mixins. we were *this* close to separation of concerns. *sigh*
     with app.app_context():
         with CLIDatabase() as session:
             user = first_or_instance(session, User, kerberos=args.kerberos)
-            if args.group == 'none':
-                user.groups = []
-            else:
-                user.groups = [session.query(Group).filter_by(name=group).one() for group in HIERARCHY[HIERARCHY.index(args.group):]]
-            session.commit()
+            set_group(session, user, args.group)
 
 
 if __name__ == '__main__':

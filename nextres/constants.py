@@ -16,3 +16,4 @@
 
 FLASH_ERROR = 'danger'
 FLASH_SUCCESS = 'success'
+HIERARCHY=['next_exec', 'desk_captains', 'desk_workers', 'residents']

@@ -36,13 +36,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
           <td class="align-middle">{{ user.kerberos }}</td>
           <td>
             <!-- the form-inline class doesn't actually set display: inline, but display: flex instead. what the actual fuck. -->
-            <form style="display: inline;">
+            <form style="display: inline;" method="post" action="{{ url_for('user_patch', user=user) }}">
+              <input type="hidden" name="_method" value="PATCH">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
               {% with exec = authorize.in_group('next_exec') %}
                 <!-- why this won't work without converting to a list i will never understand -->
 	        {% with groups = user.groups | map(attribute='name') | list %}
                   <!-- WHAT THE ACTUAL FUCK IS THIS BULLSHIT? I'M ACTUALLY PISSED.
                     https://stackoverflow.com/questions/1479233/why-doesnt-firefox-show-the-correct-default-select-option/8258154#8258154 -->
-                  <select class="form-control form-control-sm" autocomplete="off" name="group" {% if not exec and (not groups or 'next_exec' in groups) %}disabled{% endif %}>
+                  <select class="form-control form-control-sm" autocomplete="off" name="group" onchange="this.form.submit()" {% if not exec and (not groups or 'next_exec' in groups) %}disabled{% endif %}>
                     <option value="none" {% if not groups %}selected{% endif %} {% if not exec %}disabled{% endif %}>None</option>
                     <option value="residents" {% if 'residents' in groups %}selected{% endif %}>Residents</option>
                     <option value="desk_workers" {% if 'desk_workers' in groups %}selected{% endif %}>Desk Workers</option>

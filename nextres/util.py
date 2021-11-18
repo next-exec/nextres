@@ -20,8 +20,9 @@ from werkzeug.exceptions import BadRequest
 from werkzeug.formparser import parse_form_data
 from werkzeug.routing import BaseConverter
 
+from nextres.constants import HIERARCHY
 from nextres.database import db
-from nextres.database.models import User
+from nextres.database.models import Group, User
 
 # https://blog.carsonevans.ca/2020/07/06/request-method-spoofing-in-flask/
 # jank nonsense, but it works
@@ -79,3 +80,11 @@ class UserConverter(BaseConverter):
 
     def to_url(self, user):
         return user.kerberos
+
+def set_group(session, user, group):
+    if group == 'none':
+        user.groups = []
+    else:
+        # imagine having get() actually throw an error
+        user.groups = [session.query(Group).filter_by(name=name).one() for name in HIERARCHY[HIERARCHY.index(group):]]
+    session.commit()
