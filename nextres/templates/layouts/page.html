@@ -61,6 +61,26 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
                   </a>
                 </li>
 
+                {% if authorize.in_group('desk_workers') %}
+                  <li class="nav-item {% if request.endpoint in ['guestlist_index'] %}menu-open{% endif %}">
+                    <a href="#" class="nav-link {% if request.endpoint in ['guestlist_index'] %}active{% endif %}">
+                      <i class="nav-icon fas fa-desktop"></i>
+                      <p>
+                        Next Desk
+                        <i class="right fas fa-angle-left"></i>
+                      </p>
+                    </a>
+
+                    <ul class="nav nav-treeview">
+                      <li class="nav-item">
+                        <a href="{{ url_for('guestlist_index') }}" class="nav-link {% if request.endpoint == 'guestlist_index' %}active{% endif %}">
+                          <i class="fas fa-check nav-icon"></i>
+                          <p>View Guest Lists</p>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                {% endif %}
                 <li class="nav-item {% if request.endpoint.startswith('account_') %}menu-open{% endif %}">
                   <a href="#" class="nav-link {% if request.endpoint.startswith('account_') %}active{% endif %}">
                     <i class="nav-icon fas fa-user"></i>
