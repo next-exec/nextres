@@ -29,7 +29,7 @@ class GuestListType(Enum):
 
 class Guest(Base):
     __tablename__ = 'guests'
-    host_kerberos = Column(String(8), ForeignKey(User.kerberos), primary_key=True)
+    host_kerberos = Column(String(8), ForeignKey(User.kerberos, ondelete='cascade', onupdate='cascade'), primary_key=True)
     kerberos = Column(String(8), primary_key=True)
     name = Column(String(255), nullable=False)
     list_type = Column(SQLEnum(GuestListType), nullable=False)

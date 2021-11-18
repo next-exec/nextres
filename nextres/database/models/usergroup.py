@@ -21,5 +21,5 @@ from sqlalchemy import Column, ForeignKey, String, Table
 from nextres.database.util import metadata
 
 UserGroup = Table('user_group', metadata,
-                     Column('kerberos', String(8), ForeignKey('users.kerberos')),
+                     Column('kerberos', String(8), ForeignKey('users.kerberos', ondelete='cascade', onupdate='cascade')),
                      Column('group', String(255), ForeignKey('groups.name')))

@@ -25,5 +25,5 @@ from nextres.database.util import Base
 
 
 class OAuth(Base, OAuthConsumerMixin):
-    kerberos = Column(String(8), ForeignKey(User.kerberos))
+    kerberos = Column(String(8), ForeignKey(User.kerberos, ondelete='cascade', onupdate='cascade'))
     user = relationship(User)
