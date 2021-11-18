@@ -15,7 +15,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>
 
 from nextres.database.models.group import Group
-from nextres.database.models.guest import Guest
+from nextres.database.models.guest import Guest, GuestListType
 from nextres.database.models.oauth import OAuth
 from nextres.database.models.user import User
 from nextres.database.models.usergroup import UserGroup
