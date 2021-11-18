@@ -1,0 +1,60 @@
+{#
+spdx-license-identifier: agpl-3.0-only
+
+Copyright (C) 2021 Next Exec
+
+This program is free software: you can redistribute it and/or modify it
+under the terms of the GNU Affero General Public License as published by the
+Free Software Foundation, version 3.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>
+#}
+
+{% extends "layouts/page.html" %}
+{% set title %}Manage Users{% endset %}
+{% block content %}
+  <div class="card card-success">
+    <div class="card-header">
+      <h3 class="card-title">Users</h3>
+    </div>
+    <div class="card-body">
+      <p> Use the dropdown to edit a user's group. The page will immediately reload once edited.</p>
+    </div>
+    <table class="table">
+      <tr>
+        <th style="width: 25%;">Kerberos</th>
+        <th style="width: 75%;">Group</th>
+      </tr>
+      {% for user in users %}
+        <tr>
+          <td class="align-middle">{{ user.kerberos }}</td>
+          <td>
+            <!-- the form-inline class doesn't actually set display: inline, but display: flex instead. what the actual fuck. -->
+            <form style="display: inline;">
+              {% with exec = authorize.in_group('next_exec') %}
+                <!-- why this won't work without converting to a list i will never understand -->
+	        {% with groups = user.groups | map(attribute='name') | list %}
+                  <!-- WHAT THE ACTUAL FUCK IS THIS BULLSHIT? I'M ACTUALLY PISSED.
+                    https://stackoverflow.com/questions/1479233/why-doesnt-firefox-show-the-correct-default-select-option/8258154#8258154 -->
+                  <select class="form-control form-control-sm" autocomplete="off" name="group" {% if not exec and (not groups or 'next_exec' in groups) %}disabled{% endif %}>
+                    <option value="none" {% if not groups %}selected{% endif %} {% if not exec %}disabled{% endif %}>None</option>
+                    <option value="residents" {% if 'residents' in groups %}selected{% endif %}>Residents</option>
+                    <option value="desk_workers" {% if 'desk_workers' in groups %}selected{% endif %}>Desk Workers</option>
+                    <option value="desk_captains" {% if 'desk_captains' in groups %}selected{% endif %}>Desk Captains</option>
+                    <option value="next_exec" {% if 'next_exec' in groups %}selected{% endif %} {% if not exec %}disabled{% endif %}>Next Exec</option>
+                  </select>
+                {% endwith %}
+              {% endwith %}
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  </div>
+{% endblock %}
