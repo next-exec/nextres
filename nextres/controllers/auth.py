@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>
 
+__all__ = ['AuthController']
+
 from flask import render_template
 from flask_authorize import Authorize
 from flask_login import LoginManager

@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>
 
+__all__ = ['GuestListController']
+
 from flask import flash, render_template, request
 from flask_login import current_user, login_required
 from requests import get

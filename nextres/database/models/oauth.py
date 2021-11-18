@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>
 
+__all__ = ['OAuth']
+
 from flask_dance.consumer.storage.sqla import OAuthConsumerMixin
 from sqlalchemy import Column, ForeignKey, String
 from sqlalchemy.orm import relationship

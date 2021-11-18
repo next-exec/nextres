@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>
 
+__all__ = ['Guest', 'GuestListType']
+
 from sqlalchemy import Column, Enum as SQLEnum, ForeignKey, String
 
 from nextres.database.models.user import User
