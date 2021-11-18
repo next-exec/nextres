@@ -14,7 +14,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>
 
+from flask import render_template
+from flask_login import login_required
+
 from nextres.controllers.auth import AuthController
-from nextres.controllers.discord import DiscordController
-from nextres.controllers.guestlist import GuestListController
-from nextres.controllers.user import UserController
+from nextres.database import db
+from nextres.database.models import User
+
+class UserController:
+    def __init__(self, app):
+        authorize = AuthController.instance.authorize
+
+        @app.route('/users', methods=['GET'])
+        @login_required
+        @authorize.in_group('desk_captains')
+        def user_index():
+            return render_template('users/index.html', users=db.session.query(User))

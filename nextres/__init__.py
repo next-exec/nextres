@@ -39,6 +39,7 @@ database = FlaskDatabase(app)
 auth = AuthController(app)
 discord = DiscordController(app)
 guestlist = GuestListController(app)
+user = UserController(app)
 
 
 @app.route('/')
