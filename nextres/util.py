@@ -15,8 +15,13 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>
 
 from flask import render_template, Request
+from sqlalchemy.orm.exc import NoResultFound
 from werkzeug.exceptions import BadRequest
 from werkzeug.formparser import parse_form_data
+from werkzeug.routing import BaseConverter
+
+from nextres.database import db
+from nextres.database.models import User
 
 # https://blog.carsonevans.ca/2020/07/06/request-method-spoofing-in-flask/
 # jank nonsense, but it works
@@ -64,3 +69,13 @@ class ResponseContext:
 
     def return_response(self):
         return render_template(self.template, **self.ctx)
+
+class UserConverter(BaseConverter):
+    def to_python(self, kerberos):
+        user = db.session.query(User).get(kerberos)
+        if user:
+            return user
+        raise NoResultFound("could not find user '{}'".format(kerberos))
+
+    def to_url(self, user):
+        return user.kerberos

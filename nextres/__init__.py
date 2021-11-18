@@ -20,7 +20,7 @@ from flask_wtf.csrf import CSRFProtect
 
 from nextres.controllers import *
 from nextres.database import FlaskDatabase
-from nextres.util import FormMethodMiddleware, WrappedFormRequest
+from nextres.util import FormMethodMiddleware, UserConverter, WrappedFormRequest
 
 app = Flask(__name__)
 app.request_class = WrappedFormRequest
@@ -34,6 +34,9 @@ csrf = CSRFProtect(app)
 
 # Initialize database.
 database = FlaskDatabase(app)
+
+# model converters
+app.url_map.converters['User'] = UserConverter
 
 # Initialize controllers.
 auth = AuthController(app)
