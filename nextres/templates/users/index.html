@@ -19,6 +19,21 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
 {% extends "layouts/page.html" %}
 {% set title %}Manage Users{% endset %}
 {% block content %}
+  <div class="card card-info">
+    <div class="card-header">
+      <h3 class="card-title">Update Residents</h3>
+    </div>
+    <div class="card-body">
+      <p>Use the text box to provide a list of residents, with one kerberos per line. <b>This will remove all old residents from the system.</b></p>
+      <form method="post">
+        <input type="hidden" name="_method" value="PUT">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <textarea class="form-control" name="residents"></textarea>
+        <br>
+        <input type="submit" class="btn btn-primary" value="Update">
+      </form>
+    </div>
+  </div>
   <div class="card card-success">
     <div class="card-header">
       <h3 class="card-title">Users</h3>
