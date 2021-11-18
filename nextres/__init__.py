@@ -20,7 +20,7 @@ from flask_wtf.csrf import CSRFProtect
 
 from nextres.controllers import *
 from nextres.database import FlaskDatabase
-from nextres.util import FormMethodMiddleware, UserConverter, WrappedFormRequest
+from nextres.util import FormMethodMiddleware, PeopleAPI, UserConverter, WrappedFormRequest
 
 app = Flask(__name__)
 app.request_class = WrappedFormRequest
@@ -28,6 +28,9 @@ app.wsgi_app = FormMethodMiddleware(app.wsgi_app)
 app.config.from_pyfile('config.py')
 # we don't actually use AUTHORIZE_IGNORE_PROPERTY, but flask-authorize is dumb and crashes without it
 app.config.update(AUTHORIZE_IGNORE_PROPERTY='', SQLALCHEMY_TRACK_MODIFICATIONS=True)
+
+# external apis
+people = PeopleAPI(app)
 
 # csrf protection
 csrf = CSRFProtect(app)

@@ -25,7 +25,7 @@ from nextres.controllers.auth import AuthController
 from nextres.database import db
 from nextres.database.models import User
 from nextres.database.models.guest import Guest, GuestListType
-from nextres.util import ResponseContext
+from nextres.util import PeopleAPI, ResponseContext, StudentNotFoundException
 
 from re import fullmatch
 
@@ -90,11 +90,13 @@ class GuestListController:
                 if not fullmatch('[a-z0-9]*', kerberos):
                     entry[2] = 'kerberos must only contain lowercase letters and numbers'
                     continue
-                # f-strings don't appear until python 3.6. scripts is stuck on python 3.3.
-                r = get('https://mit-people-v3.cloudhub.io/people/v3/people/{}'.format(kerberos), headers=authorization)
-                data = r.json()
-                if r.status_code != 200 or data['item']['affiliations'][0]['type'] != 'student' or data['item']['affiliations'][0]['classYear'] == 'G':
-                    entry[2] = 'kerberos must belong to a current mit undergrad'
+                try:
+                    student = PeopleAPI.instance.get_kerberos(kerberos)
+                    if not student.undergrad:
+                        entry[2] = 'guest must be an undergrad'
+                        continue
+                except StudentNotFoundException:
+                    entry[2] = 'kerberos must belong to a current student'
                     continue
                 guests.append(Guest(kerberos=kerberos, name=name, list_type=GuestListType.Desk))
             if any(map(lambda entry: entry[2], entries)):

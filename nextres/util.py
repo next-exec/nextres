@@ -14,9 +14,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>
 
-__all__ = ['FormMethodMiddleware', 'ResponseContext', 'set_group', 'UserConverter', 'WrappedFormRequest']
+__all__ = ['FormMethodMiddleware', 'PeopleAPI', 'ResponseContext', 'set_group', 'StudentNotFoundException', 'UserConverter', 'WrappedFormRequest']
 
 from flask import render_template, Request
+from requests import get
 from sqlalchemy.orm.exc import NoResultFound
 from werkzeug.exceptions import BadRequest
 from werkzeug.formparser import parse_form_data
@@ -61,6 +62,31 @@ class WrappedFormRequest(Request):
         if 'wsgi._post_form' in self.environ:
             return self.environ['wsgi._post_form']
         return super().form
+
+class PeopleAPI:
+    instance = None
+
+    def __init__(self, app):
+        PeopleAPI.instance = self
+        self.authorization = {
+            'client_id': app.config['PEOPLE_API_CLIENT_ID'],
+            'client_secret': app.config['PEOPLE_API_CLIENT_SECRET']
+        }
+
+    def get_kerberos(self, kerberos):
+        r = get('https://mit-people-v3.cloudhub.io/people/v3/people/{}'.format(kerberos), headers=self.authorization)
+        if r.status_code != 200:
+            raise StudentNotFoundException("could not find student '{}'".format(kerberos))
+        return Student(r.json())
+
+class Student:
+    def __init__(self, data):
+        item = data['item']
+        self.kerberos = item['kerberosId']
+        self.undergrad = item['affiliations'][0]['classYear'] != 'G'
+
+class StudentNotFoundException(Exception):
+    pass
 
 class ResponseContext:
     def __init__(self, template, ctx):
