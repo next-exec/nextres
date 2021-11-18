@@ -21,7 +21,7 @@ from nextres.database.util import first_or_instance
 
 from argparse import ArgumentParser
 
-HIERARCHY=['desk_workers', 'residents']
+HIERARCHY=['next_exec', 'desk_captains', 'desk_workers', 'residents']
 
 def assign(args):
     # needed because of flask mixins. we were *this* close to separation of concerns. *sigh*

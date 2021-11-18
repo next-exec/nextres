@@ -47,3 +47,6 @@ class FlaskDatabase:
 def create_groups(session):
     first_or_instance(session, Group, name='residents')
     first_or_instance(session, Group, name='desk_workers')
+    first_or_instance(session, Group, name='desk_captains')
+    first_or_instance(session, Group, name='next_exec')
+    session.commit()
