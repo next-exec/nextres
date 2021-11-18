@@ -11,7 +11,7 @@ this project is still a work in progress:
 - [x] guest list management
 - [ ] room reservations
 - [ ] item checkout
-- [ ] role management
+- [x] role management
 
 **enhancements**
 
@@ -52,6 +52,12 @@ additional debugging capabilities are available via environment variables:
 | name | description |
 | --- | --- |
 | SSL_CLIENT_S_DN_Email | mit email address to authenticate as. this will allow you to access the development server as that user. |
+
+finally, nextres can be called as a command line script that exposes various utilities using `pipenv run cli <command>`.
+
+| command | description |
+| --- | --- |
+| assign <*kerberos*> <none\|residents\|desk_workers\|desk_captains\|next_exec> | assigns a user with a given kerberos to a specific group |
 
 ## installation
 
