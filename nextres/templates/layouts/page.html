@@ -81,6 +81,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
                     </ul>
                   </li>
                 {% endif %}
+
+                {% if authorize.in_group('desk_captains') %}
+                  <li class="nav-item">
+                    <a href="{{ url_for('user_index') }}" class="nav-link {% if request.endpoint in ['user_index', 'user_patch'] %}active{% endif %}">
+                      <i class="fas fa-users nav-icon"></i>
+                      <p>Manage Users</p>
+                    </a>
+                  </li>
+                {% endif %}
+
                 <li class="nav-item {% if request.endpoint.startswith('account_') %}menu-open{% endif %}">
                   <a href="#" class="nav-link {% if request.endpoint.startswith('account_') %}active{% endif %}">
                     <i class="nav-icon fas fa-user"></i>
