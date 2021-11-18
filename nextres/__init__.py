@@ -50,6 +50,6 @@ user = UserController(app)
 
 @app.route('/')
 @login_required
-@auth.authorize.in_group('residents')
+@auth.group_required('residents')
 def index():
     return render_template('index.html')

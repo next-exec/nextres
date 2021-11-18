@@ -57,17 +57,17 @@ email = """
 
 class UserController:
     def __init__(self, app):
-        authorize = AuthController.instance.authorize
+        group_required = AuthController.instance.group_required
 
         @app.route('/users', methods=['GET'])
         @login_required
-        @authorize.in_group('desk_captains')
+        @group_required('desk_captains')
         def user_index():
             return render_template('users/index.html', users=db.session.query(User))
 
         @app.route('/users', methods=['PUT'])
         @login_required
-        @authorize.in_group('next_exec')
+        @group_required('next_exec')
         def user_update():
             ctx = ResponseContext('users/index.html', {
                 'users': db.session.query(User)
@@ -111,12 +111,12 @@ class UserController:
 
         @app.route('/users/<User:user>', methods=['PATCH'])
         @login_required
-        @authorize.in_group('desk_captains')
+        @group_required('desk_captains')
         def user_patch(user):
             ctx = ResponseContext('users/index.html', {
                 'users': db.session.query(User)
             })
-            is_exec = authorize.in_group('next_exec')
+            is_exec = AuthController.instance.authorize.in_group('next_exec')
             groups = list(map(lambda group: group.name, user.groups))
             if not is_exec and (not user.groups or 'next_exec' in groups):
                 flash("You don't have permission to update the group for '{}'.".format(user.kerberos), FLASH_ERROR)

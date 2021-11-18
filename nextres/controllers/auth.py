@@ -24,6 +24,7 @@ from werkzeug.exceptions import Unauthorized
 from nextres.database import Group, User
 from nextres.database.util import db, first_or_instance
 
+from functools import wraps
 from os import getenv
 
 
@@ -37,9 +38,23 @@ class AuthController:
         self.manager.login_view = 'certificates'
         self.authorize = Authorize(app)
 
-        @app.errorhandler(Unauthorized)
-        def unauthorized(_):
-            return render_template('auth/nonresident.html'), 403
+        # used to define more specific errors that can be used to return specific unauthorized pages
+        def group_authorizer(group):
+            def wrapper(func):
+                @wraps(func)
+                def caller(*args, **kwargs):
+                    try:
+                        return self.authorize.in_group(group)(func)(*args, **kwargs)
+                    except Unauthorized:
+                        raise UnauthorizedGroup(group)
+                return caller
+            return wrapper
+
+        self.group_required = group_authorizer
+
+        @app.errorhandler(UnauthorizedGroup)
+        def unauthorized(e):
+            return render_template(e.template), 403
 
         @app.route('/certificates')
         def certificates():
@@ -50,3 +65,7 @@ class AuthController:
             email = getenv('SSL_CLIENT_S_DN_Email')
             if email:
                 return first_or_instance(db.session, User, kerberos=email.split('@')[0])
+
+class UnauthorizedGroup(Unauthorized):
+    def __init__(self, group):
+        self.template = 'auth/{}.html'.format(group)

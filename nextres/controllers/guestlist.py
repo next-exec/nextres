@@ -36,15 +36,17 @@ class GuestListController:
             'client_secret': app.config['PEOPLE_API_CLIENT_SECRET']
         }
 
+        group_required = AuthController.instance.group_required
+
         @app.route('/guestlists', methods=['GET'])
         @login_required
-        @AuthController.instance.authorize.in_group('desk_workers')
+        @group_required('desk_workers')
         def guestlist_index():
             return render_template('guestlists/index.html', residents=db.session.query(User).filter(User.groups.any(name='residents')).all(), list_type=GuestListType.Desk)
 
         @app.route('/guestlists/me', methods=['GET'])
         @login_required
-        @AuthController.instance.authorize.in_group('residents')
+        @group_required('residents')
         def guestlist_edit():
             return render_template('guestlists/edit.html',
                                    existing=None,
@@ -52,6 +54,8 @@ class GuestListController:
                                    express=current_user.guests.filter_by(list_type=GuestListType.Express).all())
 
         @app.route('/guestlists/me', methods=['PUT'])
+        @login_required
+        @group_required('residents')
         def guestlist_update():
             ctx = ResponseContext('guestlists/edit.html', {
                 'existing': None,

@@ -42,22 +42,24 @@ class DiscordController:
                                            storage=SQLAlchemyStorage(OAuth, db.session, user=current_user))
         app.register_blueprint(blueprint)
 
+        group_required = AuthController.instance.group_required
+
         @app.route('/discord')
         @login_required
-        @AuthController.instance.authorize.in_group('residents')
+        @group_required('residents')
         def account_discord_index():
             return render_template('discord.html', authorized=discord.authorized)
 
         @app.route('/discord', methods=['PUT'])
         @login_required
-        @AuthController.instance.authorize.in_group('residents')
+        @group_required('residents')
         def account_discord_update():
             join_guild()
             return render_template('discord.html', authorized=discord.authorized)
 
         @app.route('/discord', methods=['DELETE'])
         @login_required
-        @AuthController.instance.authorize.in_group('residents')
+        @group_required('residents')
         def account_discord_delete():
             ctx = ResponseContext('discord.html', {
                 'authorized': discord.authorized
@@ -102,7 +104,7 @@ class DiscordController:
 
         @oauth_authorized.connect_via(blueprint)
         @login_required
-        @AuthController.instance.authorize.in_group('residents')
+        @group_required('residents')
         def handle_authorized(_, token):
             join_guild()
 
