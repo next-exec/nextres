@@ -76,20 +76,20 @@ class GuestListController:
             duplicates = [kerberos for kerberos in kerberoi if kerberoi.count(kerberos) > 1]
             for entry in entries:
                 kerberos, name, phone, _ = entry
-                guest = current_user.guests.filter_by(list_type=GuestListType.Desk, kerberos=kerberos, name=name).first()
+                guest = current_user.guests.filter_by(list_type=GuestListType.Desk, kerberos=kerberos, name=name, phone=phone).first()
                 if guest:
                     guests.append(guest)
                     continue
                 if kerberos == '' and name == '' and phone == '':
                     # avoid empty kerberos bug
                     continue
-                if kerberos == '' and name != '':
-                    entry[3] = "kerberos must not be empty if name isn't"
+                if kerberos == '':
+                    entry[3] = "kerberos must not be empty"
                     continue
-                if kerberos != '' and name == '':
+                if name == '':
                     entry[3] = "name must not be empty if kerberos isn't"
                     continue
-                if kerberos != '' and name != '' and phone == '':
+                if phone == '':
                     entry[3] = "phone must not be empty if kerberos isn't"
                     continue
                 if kerberos in duplicates:

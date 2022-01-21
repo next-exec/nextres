@@ -135,24 +135,24 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
               {% for entry in existing %}
                 <div class="form-group">
                   {% if entry[3].startswith('phone') %}
-                    <input class="form-control is-invalid" maxlength="15" name="phones" value="{{ entry[2] }}">
+                    <input class="form-control is-invalid" maxlength="15" name="phones" value="{{ entry[2] }}" type="tel">
                     <div class="invalid-feedback">
                       {{ entry[3] }}
                     </div>
                   {% else %}
-                    <input class="form-control" maxlength="15" name="phones" value="{{ entry[2] }}">
+                    <input class="form-control" maxlength="15" name="phones" value="{{ entry[2] }}" type="tel">
                   {% endif %}
                 </div>
               {% endfor %}
             {% else %}
               {% for guest in desk %}
                 <div class="form-group">
-                  <input class="form-control" maxlength="15" name="phones" value="{{ guest.phone }}">
+                  <input class="form-control" maxlength="15" name="phones" value="{{ guest.phone }}" type="tel">
                 </div>
               {% endfor %}
               {% for _ in range(5 - desk | length) %}
                 <div class="form-group">
-                  <input class="form-control" maxlength="15" name="phones">
+                  <input class="form-control" maxlength="15" name="phones" type="tel">
                 </div>
               {% endfor %}
             {% endif %}
