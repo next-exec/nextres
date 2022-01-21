@@ -33,4 +33,4 @@ class Guest(Base):
     kerberos = Column(String(8), primary_key=True)
     name = Column(String(255), nullable=False)
     list_type = Column(SQLEnum(GuestListType), nullable=False)
-    phone = Column(String(15))
+    phone = Column(String(15), nullable=True)

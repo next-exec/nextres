@@ -76,7 +76,8 @@ class GuestListController:
             duplicates = [kerberos for kerberos in kerberoi if kerberoi.count(kerberos) > 1]
             for entry in entries:
                 kerberos, name, phone, _ = entry
-                if guest := current_user.guests.filter_by(list_type=GuestListType.Desk, kerberos=kerberos, name=name).first():
+                guest = current_user.guests.filter_by(list_type=GuestListType.Desk, kerberos=kerberos, name=name).first()
+                if guest:
                     guests.append(guest)
                     continue
                 if kerberos == '' and name == '' and phone == '':
