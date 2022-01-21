@@ -65,7 +65,7 @@ class GuestListController:
             form = request.form
             kerberoi = form.getlist('kerberoi')
             # jank. jank. jank. jank. jank.
-            entries = list(map(list, zip(kerberoi, form.getlist('names'), [''] * 5)))
+            entries = list(map(list, zip(kerberoi, form.getlist('names'), form.getlist('phones'), [''] * 5)))
             if len(entries) != 5:
                 flash('The server received an invalid request. Please contact <a href="mailto:next-techchair@mit.edu">next-techchair@mit.edu</a> for assistance.',
                       FLASH_ERROR)
@@ -75,24 +75,27 @@ class GuestListController:
             previous = []
             duplicates = [kerberos for kerberos in kerberoi if kerberoi.count(kerberos) > 1]
             for entry in entries:
-                kerberos, name, _ = entry
+                kerberos, name, phone, _ = entry
                 if guest := current_user.guests.filter_by(list_type=GuestListType.Desk, kerberos=kerberos, name=name).first():
                     guests.append(guest)
                     continue
-                if kerberos == '' and name == '':
+                if kerberos == '' and name == '' and phone == '':
                     # avoid empty kerberos bug
                     continue
                 if kerberos == '' and name != '':
-                    entry[2] = "kerberos must not be empty if name isn't"
+                    entry[3] = "kerberos must not be empty if name isn't"
                     continue
                 if kerberos != '' and name == '':
-                    entry[2] = "name must not be empty if kerberos isn't"
+                    entry[3] = "name must not be empty if kerberos isn't"
+                    continue
+                if kerberos != '' and name != '' and phone == '':
+                    entry[3] = "phone must not be empty if kerberos isn't"
                     continue
                 if kerberos in duplicates:
-                    entry[2] = 'kerberos must only be on a guest list once'
+                    entry[3] = 'kerberos must only be on a guest list once'
                     continue
                 if not fullmatch('[a-z0-9]*', kerberos):
-                    entry[2] = 'kerberos must only contain lowercase letters and numbers'
+                    entry[3] = 'kerberos must only contain lowercase letters and numbers'
                     continue
                 try:
                     student = PeopleAPI.instance.get_kerberos(kerberos)
@@ -102,8 +105,8 @@ class GuestListController:
                 except StudentNotFoundException:
                     entry[2] = 'kerberos must belong to a current student'
                     continue
-                guests.append(Guest(kerberos=kerberos, name=name, list_type=GuestListType.Desk))
-            if any(map(lambda entry: entry[2], entries)):
+                guests.append(Guest(kerberos=kerberos, name=name, phone=phone, list_type=GuestListType.Desk))
+            if any(map(lambda entry: entry[3], entries)):
                 flash('An invalid guestlist was received. See below.', FLASH_ERROR)
                 return ctx.return_response()
             current_user.guests = guests

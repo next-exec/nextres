@@ -72,15 +72,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
         <input type="hidden" name="_method" value="PUT">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-4">
             <label>Kerberos</label>
             {% if existing %}
               {% for entry in existing %}
                 <div class="form-group">
-                  {% if entry[2].startswith('kerberos') %}
+                  {% if entry[3].startswith('kerberos') %}
                     <input class="form-control is-invalid" maxlength="8" pattern="[a-z0-9]*" title="lowercase letters and numbers only" name="kerberoi" value="{{ entry[0] }}">
                     <div class="invalid-feedback">
-                      {{ entry[2] }}
+                      {{ entry[3] }}
                     </div>
                   {% else %}
                     <input class="form-control" maxlength="8" name="kerberoi" value="{{ entry[0] }}">
@@ -101,15 +101,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
               {% endfor %}
             {% endif %}
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <label>Full Name</label>
             {% if existing %}
               {% for entry in existing %}
                 <div class="form-group">
-                  {% if entry[2].startswith('name') %}
+                  {% if entry[3].startswith('name') %}
                     <input class="form-control is-invalid" maxlength="255" name="names" value="{{ entry[1] }}">
                     <div class="invalid-feedback">
-                      {{ entry[2] }}
+                      {{ entry[3] }}
                     </div>
                   {% else %}
                     <input class="form-control" maxlength="255" name="names" value="{{ entry[1] }}">
@@ -125,6 +125,34 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
               {% for _ in range(5 - desk | length) %}
                 <div class="form-group">
                   <input class="form-control" maxlength="255" name="names">
+                </div>
+              {% endfor %}
+            {% endif %}
+          </div>
+          <div class="col-md-4">
+            <label>Phone</label>
+            {% if existing %}
+              {% for entry in existing %}
+                <div class="form-group">
+                  {% if entry[3].startswith('phone') %}
+                    <input class="form-control is-invalid" maxlength="15" name="phones" value="{{ entry[2] }}">
+                    <div class="invalid-feedback">
+                      {{ entry[3] }}
+                    </div>
+                  {% else %}
+                    <input class="form-control" maxlength="15" name="phones" value="{{ entry[2] }}">
+                  {% endif %}
+                </div>
+              {% endfor %}
+            {% else %}
+              {% for guest in desk %}
+                <div class="form-group">
+                  <input class="form-control" maxlength="15" name="phones" value="{{ guest.phone }}">
+                </div>
+              {% endfor %}
+              {% for _ in range(5 - desk | length) %}
+                <div class="form-group">
+                  <input class="form-control" maxlength="15" name="phones">
                 </div>
               {% endfor %}
             {% endif %}
