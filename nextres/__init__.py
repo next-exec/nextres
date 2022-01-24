@@ -45,6 +45,7 @@ app.url_map.converters['User'] = UserConverter
 auth = AuthController(app)
 discord = DiscordController(app)
 guestlist = GuestListController(app)
+settings = SettingsController(app)
 user = UserController(app)
 
 

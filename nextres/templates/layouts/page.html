@@ -91,6 +91,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
                   </li>
                 {% endif %}
 
+                {% if authorize.in_group('next_exec') %}
+                  <li class="nav-item">
+                    <a href="{{ url_for('settings_index') }}" class="nav-link {% if request.endpoint in ['settings_index', 'settings_update'] %}active{% endif %}">
+                      <i class="fas fa-cog nav-icon"></i>
+                      <p>Manage Settings</p>
+                    </a>
+                  </li>
+                {% endif %}
+
                 <li class="nav-item {% if request.endpoint.startswith('account_') %}menu-open{% endif %}">
                   <a href="#" class="nav-link {% if request.endpoint.startswith('account_') %}active{% endif %}">
                     <i class="nav-icon fas fa-user"></i>

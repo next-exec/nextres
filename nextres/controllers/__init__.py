@@ -17,4 +17,5 @@
 from nextres.controllers.auth import AuthController
 from nextres.controllers.discord import DiscordController
 from nextres.controllers.guestlist import GuestListController
+from nextres.controllers.settings import SettingsController
 from nextres.controllers.user import UserController

@@ -31,3 +31,12 @@ def first_or_instance(session, model, **kwargs):
         session.add(instance)
         session.commit()
     return instance
+
+def first_or_default(session, model, **kwargs):
+    instance = session.query(model).first()
+    if not instance:
+        default = model(**kwargs)
+        session.add(default)
+        session.commit()
+        return default
+    return instance

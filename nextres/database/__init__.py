@@ -21,7 +21,8 @@ from sqlalchemy.orm import Session
 
 from nextres.config import SQLALCHEMY_DATABASE_URI
 from nextres.database.models import *
-from nextres.database.util import db, first_or_instance, metadata
+from nextres.database.models.settings import SettingsIntegrity
+from nextres.database.util import db, first_or_instance, metadata, first_or_default
 
 
 class CLIDatabase:
@@ -51,4 +52,5 @@ def create_groups(session):
     first_or_instance(session, Group, name='desk_workers')
     first_or_instance(session, Group, name='desk_captains')
     first_or_instance(session, Group, name='next_exec')
+    first_or_default(session, Settings, integrity=SettingsIntegrity.Unique, express_guest_editable=False)
     session.commit()
