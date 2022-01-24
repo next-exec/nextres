@@ -34,3 +34,4 @@ class Guest(Base):
     name = Column(String(255), nullable=False)
     list_type = Column(SQLEnum(GuestListType), nullable=False)
     phone = Column(String(15), nullable=True)
+    mit_id = Column(String(9), nullable=True)
