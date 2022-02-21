@@ -86,7 +86,7 @@ class GuestListController:
                     if express_guest:
                         express_guests.append(express_guest)
                         continue
-                    if kerberos == '' and name == '':
+                    if kerberos == '' and name == '' and mit_id =='':
                         # avoid empty kerberos bug
                         continue
                     if kerberos == '':
