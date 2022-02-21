@@ -117,6 +117,10 @@ class GuestListController:
                         continue
                     express_guests.append(Guest(kerberos=kerberos, name=name, mit_id=mit_id, list_type=GuestListType.Express))
 
+                if any(map(lambda express_entry: express_entry[3], express_entries)):
+                    flash('An invalid guestlist was received. See below.', FLASH_ERROR)
+                    return ctx.return_response()
+
                 for entry in entries:
                     kerberos, name, phone, _ = entry
                     guest = current_user.guests.filter_by(list_type=GuestListType.Desk, kerberos=kerberos, name=name, phone=phone).first()
@@ -150,7 +154,7 @@ class GuestListController:
                         entry[3] = 'kerberos must belong to a current student'
                         continue
                     guests.append(Guest(kerberos=kerberos, name=name, phone=phone, list_type=GuestListType.Desk))
-                if any(map(lambda entry: entry[3], entries)) or any(map(lambda express_entry: express_entry[3], express_entries)):
+                if any(map(lambda entry: entry[3], entries)):
                     flash('An invalid guestlist was received. See below.', FLASH_ERROR)
                     return ctx.return_response()
                 current_user.guests = guests + express_guests
