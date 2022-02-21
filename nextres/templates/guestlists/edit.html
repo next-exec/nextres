@@ -31,32 +31,96 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
     </div>
     <div class="card-body">
       <p>Express guests can only be managed once a semester by contacting Next Exec, and can tap in without a desk worker.</p>
+
+      <form method="post">
+        <input type="hidden" name="_method" value="PUT">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
           <label>Kerberos</label>
-          {% for guest in express %}
-            <div class="form-group">
-              <input class="form-control">
-            </div>
-          {% endfor %}
-          {% for _ in range(3 - express | length) %}
-            <div class="form-group">
-              <input class="form-control">
-            </div>
-          {% endfor %}
+          {% if existing_express %}
+              {% for entry in existing_express %}
+                <div class="form-group">
+                  {% if entry[3].startswith('kerberos') %}
+                    <input class="form-control is-invalid" maxlength="8" pattern="[a-z0-9]*" title="lowercase letters and numbers only" name="kerberoi_express" value="{{ entry[0] }}">
+                    <div class="invalid-feedback">
+                      {{ entry[3] }}
+                    </div>
+                  {% else %}
+                    <input class="form-control" maxlength="8" name="kerberoi_express" value="{{ entry[0] }}">
+                  {% endif %}
+                </div>
+              {% endfor %}
+            {% else %}
+              {% for guest in express %}
+                <div class="form-group">
+                  <!-- imagine having consistency in *http implementations* -->
+                  <input class="form-control" maxlength="8" pattern="[a-z0-9]*" title="lowercase letters and numbers only" name="kerberoi_express" value="{{ guest.kerberos }}">
+                </div>
+              {% endfor %}
+              {% for _ in range(3 - express | length) %}
+                <div class="form-group">
+                  <input class="form-control" maxlength="8" pattern="[a-z0-9]*" title="lowercase letters and numbers only" name="kerberoi_express">
+                </div>
+              {% endfor %}
+            {% endif %}
+          
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <label>Full Name</label>
-          {% for guest in express %}
-            <div class="form-group">
-              <input class="form-control">
-            </div>
-          {% endfor %}
-          {% for _ in range(3 - express | length) %}
-            <div class="form-group">
-              <input class="form-control">
-            </div>
-          {% endfor %}
+          {% if existing_express %}
+              {% for entry in existing_express %}
+                <div class="form-group">
+                  {% if entry[3].startswith('name') %}
+                    <input class="form-control is-invalid" maxlength="255" name="names_express" value="{{ entry[1] }}">
+                    <div class="invalid-feedback">
+                      {{ entry[3] }}
+                    </div>
+                  {% else %}
+                    <input class="form-control" maxlength="255" name="names_express" value="{{ entry[1] }}">
+                  {% endif %}
+                </div>
+              {% endfor %}
+            {% else %}
+              {% for guest in express %}
+                <div class="form-group">
+                  <input class="form-control" maxlength="255" name="names_express" value="{{ guest.name }}">
+                </div>
+              {% endfor %}
+              {% for _ in range(3 - express | length) %}
+                <div class="form-group">
+                  <input class="form-control" maxlength="255" name="names_express">
+                </div>
+              {% endfor %}
+            {% endif %}
+        </div>
+        <div class="col-md-4">
+          <label>MIT ID Number</label>
+          {% if existing_express %}
+              {% for entry in existing_express %}
+                <div class="form-group">
+                  {% if entry[3].startswith('id') %}
+                    <input class="form-control is-invalid" minlength= "9" maxlength="9" name="mit_id" value="{{ entry[2] }}">
+                    <div class="invalid-feedback">
+                      {{ entry[3] }}
+                    </div>
+                  {% else %}
+                    <input class="form-control" minlength= "9" maxlength="9" name="mit_id" value="{{ entry[2] }}">
+                  {% endif %}
+                </div>
+              {% endfor %}
+            {% else %}
+              {% for guest in express %}
+                <div class="form-group">
+                  <input class="form-control" minlength= "9" maxlength="9" name="mit_id" value="{{ guest.mit_id }}">
+                </div>
+              {% endfor %}
+              {% for _ in range(3 - express | length) %}
+                <div class="form-group">
+                  <input class="form-control" minlength= "9" maxlength="9" name="mit_id">
+                </div>
+              {% endfor %}
+            {% endif %}
         </div>
       </div>
     </div>
@@ -67,10 +131,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
       <h3 class="card-title">Front Desk Guests</h3>
     </div>
     <div class="card-body">
-      <form method="post">
         <p>Front desk guests can be managed at any time, but must be verified by a desk worker every time they visit Next House.</p>
-        <input type="hidden" name="_method" value="PUT">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        
         <div class="row">
           <div class="col-md-4">
             <label>Kerberos</label>

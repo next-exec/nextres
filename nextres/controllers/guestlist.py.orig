@@ -44,81 +44,40 @@ class GuestListController:
         def guestlist_index():
             return render_template('guestlists/index.html', residents=db.session.query(User).filter(User.groups.any(name='residents')).all(), list_type=GuestListType.Desk)
 
-          desk=current_user.guests.filter_by(list_type=GuestListType.Desk).all(),
-                                   express=current_user.guests.filter_by(list_type=GuestListType.Express).all())
-#WTFFFF
-        @app.route('/guestlists/me', methods=['PUT'])
-        @login_required
-        @group_required('residents')
-        def guestlist_update(): @app.route('/guestlists/me', methods=['GET'])
+        @app.route('/guestlists/me', methods=['GET'])
         @login_required
         @group_required('residents')
         def guestlist_edit():
             return render_template('guestlists/edit.html',
                                    existing=None,
-                                
+                                   desk=current_user.guests.filter_by(list_type=GuestListType.Desk).all(),
+                                   express=current_user.guests.filter_by(list_type=GuestListType.Express).all())
+
+        @app.route('/guestlists/me', methods=['PUT'])
+        @login_required
+        @group_required('residents')
+        def guestlist_update():
             ctx = ResponseContext('guestlists/edit.html', {
                 'existing': None,
-                'existing_express': None,
                 'desk': current_user.guests.filter_by(list_type=GuestListType.Desk).all(),
                 'express': current_user.guests.filter_by(list_type=GuestListType.Express).all()
             })
             form = request.form
             kerberoi = form.getlist('kerberoi')
-            express_kerberoi = form.getlist('kerberoi_express')
-            all_kerbs = kerberoi + express_kerberoi
             # jank. jank. jank. jank. jank.
-
+<<<<<<< HEAD
             entries = list(map(list, zip(kerberoi, form.getlist('names'), form.getlist('phones'), [''] * 5)))
-            express_entries = list(map(list, zip(express_kerberoi, form.getlist('names_express'), form.getlist('mit_id'), [''] * 3)))
-
-            if len(entries) != 5 or len(express_entries) != 3:
+=======
+            entries = list(map(list, zip(kerberoi, form.getlist('names'), form.getlist('phone'), [''] * 5)))
+>>>>>>> 7bdcf00 (Random small changes)
+            if len(entries) != 5:
                 flash('The server received an invalid request. Please contact <a href="mailto:next-techchair@mit.edu">next-techchair@mit.edu</a> for assistance.',
                       FLASH_ERROR)
                 return ctx.return_response()
             ctx['existing'] = entries
-            ctx['existing_express'] = express_entries
-            express_guests = []
             guests = []
             previous = []
-            duplicates = [kerberos for kerberos in all_kerbs if all_kerbs.count(kerberos) > 1]
-            for express_entry in express_entries:
-                kerberos, name, mit_id, _ = express_entry
-                express_guest = current_user.guests.filter_by(list_type=GuestListType.Express, kerberos=kerberos, name=name, mit_id = mit_id).first()
-                if express_guest:
-                    express_guests.append(express_guest)
-                    continue
-                if kerberos == '' and name == '':
-                    # avoid empty kerberos bug
-                    continue
-                if kerberos == '':
-                    express_entries[3] = "kerberos must not be empty"
-                    continue
-                if name == '':
-                    express_entries[3] = "name must not be empty if kerberos isn't"
-                    continue
-                if mit_id == '':
-                    express_entries[3] = "id number must not be empty if kerberos isn't"
-                    continue
-                if kerberos in duplicates:
-                    express_entries[3] = 'kerberos must only be on a guest list once'
-                    continue
-                if not fullmatch('[a-z0-9]*', kerberos):
-                    express_entries[3] = 'kerberos must only contain lowercase letters and numbers'
-                    continue
-                if len(mit_id) != 9:
-                    express_entries[3] = 'id number must contain exactly 9 numbers'
-                    continue
-                try:
-                    student = PeopleAPI.instance.get_kerberos(kerberos)
-                    if not student.undergrad:
-                        express_entries[3] = 'guest must be an undergrad'
-                        continue
-                except StudentNotFoundException:
-                    express_entries[3] = 'kerberos must belong to a current student'
-                    continue
-                express_guests.append(Guest(kerberos=kerberos, name=name, mit_id=mit_id, list_type=GuestListType.Express))
-
+            duplicates = [kerberos for kerberos in kerberoi if kerberoi.count(kerberos) > 1]
             for entry in entries:
                 kerberos, name, phone, _ = entry
                 guest = current_user.guests.filter_by(list_type=GuestListType.Desk, kerberos=kerberos, name=name, phone=phone).first()
@@ -128,6 +87,7 @@ class GuestListController:
                 if kerberos == '' and name == '' and phone == '':
                     # avoid empty kerberos bug
                     continue
+<<<<<<< HEAD
                 if kerberos == '':
                     entry[3] = "kerberos must not be empty"
                     continue
@@ -136,6 +96,19 @@ class GuestListController:
                     continue
                 if phone == '':
                     entry[3] = "phone must not be empty if kerberos isn't"
+=======
+                if kerberos == '' and name != '' and phone != '':
+                    entry[2] = "kerberos must not be empty if name isn't"
+                    continue
+                if kerberos != '' and name == '' and phone != '':
+                    entry[2] = "name must not be empty if kerberos isn't"
+>>>>>>> 7bdcf00 (Random small changes)
+                    continue
+                if kerberos != '' and name != '' and phone == '':
+                    entry[2] = "phone must not be empty if kerberos isn't"
+                    continue
+                if kerberos != '' and name == '' and phone == '':
+                    entry[2] = "phone must not be empty if kerberos isn't"
                     continue
                 if kerberos in duplicates:
                     entry[3] = 'kerberos must only be on a guest list once'
@@ -152,10 +125,10 @@ class GuestListController:
                     entry[2] = 'kerberos must belong to a current student'
                     continue
                 guests.append(Guest(kerberos=kerberos, name=name, phone=phone, list_type=GuestListType.Desk))
-            if any(map(lambda entry: entry[3], entries)) or any(map(lambda express_entry: express_entry[2], express_entries)):
+            if any(map(lambda entry: entry[3], entries)):
                 flash('An invalid guestlist was received. See below.', FLASH_ERROR)
                 return ctx.return_response()
-            current_user.guests = guests + express_guests
+            current_user.guests = guests
             db.session.commit()
             flash('Guest list updated successfully!', FLASH_SUCCESS)
             return ctx.return_response()
