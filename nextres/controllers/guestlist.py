@@ -144,10 +144,10 @@ class GuestListController:
                     try:
                         student = PeopleAPI.instance.get_kerberos(kerberos)
                         if not student.undergrad:
-                            entry[2] = 'guest must be an undergrad'
+                            entry[3] = 'guest must be an undergrad'
                             continue
                     except StudentNotFoundException:
-                        entry[2] = 'kerberos must belong to a current student'
+                        entry[3] = 'kerberos must belong to a current student'
                         continue
                     guests.append(Guest(kerberos=kerberos, name=name, phone=phone, list_type=GuestListType.Desk))
                 if any(map(lambda entry: entry[3], entries)) or any(map(lambda express_entry: express_entry[3], express_entries)):
