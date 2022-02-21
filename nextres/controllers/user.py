@@ -88,7 +88,7 @@ class UserController:
                     invalid.append(kerberos)
                 user = first_or_instance(db.session, User, kerberos=kerberos)
                 if not user.groups:
-                    email.append(kerberos)
+                    new.append(kerberos)
                     set_group(db.session, user, 'residents')
             # send emails now so that even if there were errors, people don't miss emails as a result
             if new:
