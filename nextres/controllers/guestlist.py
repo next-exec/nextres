@@ -90,30 +90,30 @@ class GuestListController:
                         # avoid empty kerberos bug
                         continue
                     if kerberos == '':
-                        express_entries[3] = "kerberos must not be empty"
+                        express_entry[3] = "kerberos must not be empty"
                         continue
                     if name == '':
-                        express_entries[3] = "name must not be empty if kerberos isn't"
+                        express_entry[3] = "name must not be empty if kerberos isn't"
                         continue
                     if mit_id == '':
-                        express_entries[3] = "id number must not be empty if kerberos isn't"
+                        express_entry[3] = "id number must not be empty if kerberos isn't"
                         continue
                     if kerberos in duplicates:
-                        express_entries[3] = 'kerberos must only be on a guest list once'
+                        express_entry[3] = 'kerberos must only be on a guest list once'
                         continue
                     if not fullmatch('[a-z0-9]*', kerberos):
-                        express_entries[3] = 'kerberos must only contain lowercase letters and numbers'
+                        express_entry[3] = 'kerberos must only contain lowercase letters and numbers'
                         continue
                     if len(mit_id) != 9:
-                        express_entries[3] = 'id number must contain exactly 9 numbers'
+                        express_entry[3] = 'id number must contain exactly 9 numbers'
                         continue
                     try:
                         student = PeopleAPI.instance.get_kerberos(kerberos)
                         if not student.undergrad:
-                            express_entries[3] = 'guest must be an undergrad'
+                            express_entry[3] = 'guest must be an undergrad'
                             continue
                     except StudentNotFoundException:
-                        express_entries[3] = 'kerberos must belong to a current student'
+                        express_entry[3] = 'kerberos must belong to a current student'
                         continue
                     express_guests.append(Guest(kerberos=kerberos, name=name, mit_id=mit_id, list_type=GuestListType.Express))
 
