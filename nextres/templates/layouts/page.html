@@ -60,7 +60,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
                     <p>Edit Guest List</p>
                   </a>
                 </li>
-
+                
                 {% if authorize.in_group('desk_workers') %}
                   <li class="nav-item {% if request.endpoint in ['guestlist_index'] %}menu-open{% endif %}">
                     <a href="#" class="nav-link {% if request.endpoint in ['guestlist_index'] %}active{% endif %}">

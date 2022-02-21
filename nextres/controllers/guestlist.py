@@ -65,7 +65,9 @@ class GuestListController:
             form = request.form
             kerberoi = form.getlist('kerberoi')
             # jank. jank. jank. jank. jank.
+
             entries = list(map(list, zip(kerberoi, form.getlist('names'), form.getlist('phones'), [''] * 5)))
+
             if len(entries) != 5:
                 flash('The server received an invalid request. Please contact <a href="mailto:next-techchair@mit.edu">next-techchair@mit.edu</a> for assistance.',
                       FLASH_ERROR)
