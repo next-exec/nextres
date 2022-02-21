@@ -43,20 +43,19 @@ class GuestListController:
         @group_required('desk_workers')
         def guestlist_index():
             return render_template('guestlists/index.html', residents=db.session.query(User).filter(User.groups.any(name='residents')).all(), list_type=GuestListType.Desk)
-
-          desk=current_user.guests.filter_by(list_type=GuestListType.Desk).all(),
-                                   express=current_user.guests.filter_by(list_type=GuestListType.Express).all())
-#WTFFFF
-        @app.route('/guestlists/me', methods=['PUT'])
-        @login_required
-        @group_required('residents')
-        def guestlist_update(): @app.route('/guestlists/me', methods=['GET'])
+        @app.route('/guestlists/me', methods=['GET'])
         @login_required
         @group_required('residents')
         def guestlist_edit():
             return render_template('guestlists/edit.html',
                                    existing=None,
-                                
+          desk=current_user.guests.filter_by(list_type=GuestListType.Desk).all(),
+                                   express=current_user.guests.filter_by(list_type=GuestListType.Express).all())
+
+        @app.route('/guestlists/me', methods=['PUT'])
+        @login_required
+        @group_required('residents')
+        def guestlist_edit():   
             ctx = ResponseContext('guestlists/edit.html', {
                 'existing': None,
                 'existing_express': None,
