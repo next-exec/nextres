@@ -100,24 +100,24 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
               {% for entry in existing_express %}
                 <div class="form-group">
                   {% if entry[3].startswith('id') %}
-                    <input class="form-control is-invalid" name="mit_id" value="{{ entry[2] }}">
+                    <input class="form-control is-invalid" name="mit_id" maxlength="9" value="{{ entry[2] }}">
                     <div class="invalid-feedback">
                       {{ entry[3] }}
                     </div>
                   {% else %}
-                    <input class="form-control" name="mit_id" value="{{ entry[2] }}">
+                    <input class="form-control" name="mit_id" maxlength="9" value="{{ entry[2] }}">
                   {% endif %}
                 </div>
               {% endfor %}
             {% else %}
               {% for guest in express %}
                 <div class="form-group">
-                  <input class="form-control" name="mit_id" value="{{ guest.mit_id }}">
+                  <input class="form-control" name="mit_id" maxlength="9" value="{{ guest.mit_id }}">
                 </div>
               {% endfor %}
               {% for _ in range(3 - express | length) %}
                 <div class="form-group">
-                  <input class="form-control" name="mit_id">
+                  <input class="form-control" name="mit_id" maxlength="9">
                 </div>
               {% endfor %}
             {% endif %}

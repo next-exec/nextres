@@ -110,7 +110,7 @@ class GuestListController:
                     try:
                         num = int(mit_id)
                     except:
-                        entry[3] = 'id number must only contain numbers'
+                        express_entry[3] = 'id number must only contain numbers'
                         continue
                     try:
                         student = PeopleAPI.instance.get_kerberos(kerberos)
