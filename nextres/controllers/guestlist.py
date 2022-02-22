@@ -145,6 +145,14 @@ class GuestListController:
                     if not fullmatch('[a-z0-9]*', kerberos):
                         entry[3] = 'kerberos must only contain lowercase letters and numbers'
                         continue
+                    if len(phone) >15:
+                        express_entry[3] = "phone numbers can't have more than 15 digits"
+                        continue
+                    try:
+                        num = int(phone)
+                    except:
+                        entry[3] = 'phone number must only contain numbers'
+                        continue
                     try:
                         student = PeopleAPI.instance.get_kerberos(kerberos)
                         if not student.undergrad:
