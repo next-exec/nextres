@@ -68,7 +68,7 @@ class GuestListController:
                 # jank. jank. jank. jank. jank.
 
                 entries = list(map(list, zip(kerberoi, form.getlist('names'), form.getlist('phones'), [''] * 5)))
-                express_entries = list(map(list, zip(express_kerberoi, form.getlist('names_express'), form.getlist('mit_id'), [''] * 3)))
+                express_entries = list(map(list, zip(express_kerberoi, form.getlist('names_express'), form.getlist('mit_id'), form.getlist('phone_express'), [''] * 3)))
 
                 if len(entries) != 5 or len(express_entries) != 3:
                     flash('The server received an invalid request. Please contact <a href="mailto:next-techchair@mit.edu">next-techchair@mit.edu</a> for assistance.',
@@ -162,7 +162,7 @@ class GuestListController:
                         entry[3] = 'kerberos must only contain lowercase letters and numbers'
                         continue
                     if len(phone) >15:
-                        express_entry[3] = "phone numbers can't have more than 15 digits"
+                        entry[3] = "phone numbers can't have more than 15 digits"
                         continue
                     try:
                         num = int(phone)
