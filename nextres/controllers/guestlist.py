@@ -81,7 +81,7 @@ class GuestListController:
                 previous = []
                 duplicates = [kerberos for kerberos in all_kerbs if all_kerbs.count(kerberos) > 1]
                 for express_entry in express_entries:
-                    kerberos, name, mit_id, phone _ = express_entry
+                    kerberos, name, mit_id, phone, _ = express_entry
                     express_guest = current_user.guests.filter_by(list_type=GuestListType.Express, kerberos=kerberos, name=name, mit_id = mit_id, phone = phone).first()
                     if express_guest:
                         express_guests.append(express_guest)
