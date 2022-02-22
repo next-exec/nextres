@@ -53,8 +53,7 @@ class GuestListController:
                   return render_template('guestlists/edit.html',
                                    existing=None,
                                    desk=current_user.guests.filter_by(list_type=GuestListType.Desk).all(),
-                                   express=current_user.guests.filter_by(list_type=GuestListType.Express).all(),
-                                   editable = db.session.query(Settings).filter(express_guest_editable= True).first())
+                                   express=current_user.guests.filter_by(list_type=GuestListType.Express).all())
             else:
                 ctx = ResponseContext('guestlists/edit.html', {
                     'existing': None,
