@@ -131,7 +131,7 @@ class GuestListController:
                     except StudentNotFoundException:
                         express_entry[4] = 'kerberos must belong to a current student'
                         continue
-                    express_guests.append(Guest(kerberos=kerberos, name=name, mit_id=mit_id, list_type=GuestListType.Express))
+                    express_guests.append(Guest(kerberos=kerberos, name=name, mit_id=mit_id, phone = phone, list_type=GuestListType.Express))
 
                 if any(map(lambda express_entry: express_entry[4], express_entries)):
                     flash('An invalid guestlist was received. See below.', FLASH_ERROR)
