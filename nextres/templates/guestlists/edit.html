@@ -35,15 +35,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
         <input type="hidden" name="_method" value="PUT">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label>Kerberos</label>
           {% if existing_express %}
               {% for entry in existing_express %}
                 <div class="form-group">
-                  {% if entry[3].startswith('kerberos') %}
+                  {% if entry[4].startswith('kerberos') %}
                     <input class="form-control is-invalid" maxlength="8" pattern="[a-z0-9]*" title="lowercase letters and numbers only" name="kerberoi_express" value="{{ entry[0] }}">
                     <div class="invalid-feedback">
-                      {{ entry[3] }}
+                      {{ entry[4] }}
                     </div>
                   {% else %}
                     <input class="form-control" maxlength="8" name="kerberoi_express" value="{{ entry[0] }}">
@@ -65,15 +65,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
             {% endif %}
           
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label>Full Name</label>
           {% if existing_express %}
               {% for entry in existing_express %}
                 <div class="form-group">
-                  {% if entry[3].startswith('name') %}
+                  {% if entry[4].startswith('name') %}
                     <input class="form-control is-invalid" maxlength="255" name="names_express" value="{{ entry[1] }}">
                     <div class="invalid-feedback">
-                      {{ entry[3] }}
+                      {{ entry[4] }}
                     </div>
                   {% else %}
                     <input class="form-control" maxlength="255" name="names_express" value="{{ entry[1] }}">
@@ -93,15 +93,15 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
               {% endfor %}
             {% endif %}
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label>MIT ID Number</label>
           {% if existing_express %}
               {% for entry in existing_express %}
                 <div class="form-group">
-                  {% if entry[3].startswith('id') %}
+                  {% if entry[4].startswith('id') %}
                     <input class="form-control is-invalid" name="mit_id" maxlength="9" value="{{ entry[2] }}">
                     <div class="invalid-feedback">
-                      {{ entry[3] }}
+                      {{ entry[4] }}
                     </div>
                   {% else %}
                     <input class="form-control" name="mit_id" maxlength="9" value="{{ entry[2] }}">
@@ -117,6 +117,35 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
               {% for _ in range(3 - express | length) %}
                 <div class="form-group">
                   <input class="form-control" name="mit_id" maxlength="9">
+                </div>
+              {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="col-md-3">
+          <label>Phone Number</label>
+          {% if existing_express %}
+              {% for entry in existing_express %}
+                <div class="form-group">
+                  {% if entry[4].startswith('phone') %}
+                    <input class="form-control is-invalid" name="phone_express" maxlength="15" value="{{ entry[3] }}">
+                    <div class="invalid-feedback">
+                      {{ entry[4] }}
+                    </div>
+                  {% else %}
+                    <input class="form-control" name="phone_express" maxlength="15" value="{{ entry[3] }}">
+                  {% endif %}
+                </div>
+              {% endfor %}
+            {% else %}
+              {% for guest in express %}
+                <div class="form-group">
+                  <input class="form-control" name="phone_express" maxlength="15" value="{{ guest.phone }}">
+                </div>
+              {% endfor %}
+              {% for _ in range(3 - express | length) %}
+                <div class="form-group">
+                  <input class="form-control" name="phone_express" maxlength="15">
                 </div>
               {% endfor %}
             {% endif %}

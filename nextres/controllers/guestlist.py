@@ -81,48 +81,59 @@ class GuestListController:
                 previous = []
                 duplicates = [kerberos for kerberos in all_kerbs if all_kerbs.count(kerberos) > 1]
                 for express_entry in express_entries:
-                    kerberos, name, mit_id, _ = express_entry
-                    express_guest = current_user.guests.filter_by(list_type=GuestListType.Express, kerberos=kerberos, name=name, mit_id = mit_id).first()
+                    kerberos, name, mit_id, phone _ = express_entry
+                    express_guest = current_user.guests.filter_by(list_type=GuestListType.Express, kerberos=kerberos, name=name, mit_id = mit_id, phone = phone).first()
                     if express_guest:
                         express_guests.append(express_guest)
                         continue
-                    if kerberos == '' and name == '' and mit_id =='':
+                    if kerberos == '' and name == '' and mit_id =='' and phone == '':
                         # avoid empty kerberos bug
                         continue
                     if kerberos == '':
-                        express_entry[3] = "kerberos must not be empty"
+                        express_entry[4] = "kerberos must not be empty"
                         continue
                     if name == '':
-                        express_entry[3] = "name must not be empty if kerberos isn't"
+                        express_entry[4] = "name must not be empty if kerberos isn't"
                         continue
                     if mit_id == '':
-                        express_entry[3] = "id number must not be empty if kerberos isn't"
+                        express_entry[4] = "id number must not be empty if kerberos isn't"
+                        continue
+                    if phone == '':
+                        express_entry[4] = "phone number must not be empty if kerberos isn't"
                         continue
                     if kerberos in duplicates:
-                        express_entry[3] = 'kerberos must only be on a guest list once'
+                        express_entry[4] = 'kerberos must only be on a guest list once'
                         continue
                     if not fullmatch('[a-z0-9]*', kerberos):
-                        express_entry[3] = 'kerberos must only contain lowercase letters and numbers'
+                        express_entry[4] = 'kerberos must only contain lowercase letters and numbers'
                         continue
                     if len(mit_id) != 9:
-                        express_entry[3] = 'id number must contain exactly 9 numbers'
+                        express_entry[4] = 'id number must contain exactly 9 numbers'
                         continue
                     try:
                         num = int(mit_id)
                     except:
-                        express_entry[3] = 'id number must only contain numbers'
+                        express_entry[4] = 'id number must only contain numbers'
+                        continue
+                    if len(phone) >15:
+                        express_entry[4] = "phone numbers can't have more than 15 digits"
+                        continue
+                    try:
+                        num = int(phone)
+                    except:
+                        express_entry[4] = 'phone number must only contain numbers'
                         continue
                     try:
                         student = PeopleAPI.instance.get_kerberos(kerberos)
                         if not student.undergrad:
-                            express_entry[3] = 'guest must be an undergrad'
+                            express_entry[4] = 'guest must be an undergrad'
                             continue
                     except StudentNotFoundException:
-                        express_entry[3] = 'kerberos must belong to a current student'
+                        express_entry[4] = 'kerberos must belong to a current student'
                         continue
                     express_guests.append(Guest(kerberos=kerberos, name=name, mit_id=mit_id, list_type=GuestListType.Express))
 
-                if any(map(lambda express_entry: express_entry[3], express_entries)):
+                if any(map(lambda express_entry: express_entry[4], express_entries)):
                     flash('An invalid guestlist was received. See below.', FLASH_ERROR)
                     return ctx.return_response()
 
