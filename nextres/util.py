@@ -83,7 +83,8 @@ class Student:
     def __init__(self, data):
         item = data['item']
         self.kerberos = item['kerberosId']
-        self.item = item
+        with open('test.txt', 'w') as f:
+            f.write(item)
         self.undergrad = 'classYear' in item['affiliations'][0] and item['affiliations'][0]['classYear'] != 'G'
 
 class StudentNotFoundException(Exception):
