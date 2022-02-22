@@ -114,6 +114,9 @@ class GuestListController:
                         continue
                     try:
                         student = PeopleAPI.instance.get_kerberos(kerberos)
+                        if student.undergrad:
+                            express_entry[3] = student.item
+                            continue
                         if not student.undergrad:
                             express_entry[3] = 'guest must be an undergrad'
                             continue
