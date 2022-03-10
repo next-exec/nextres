@@ -126,7 +126,7 @@ class GuestListController:
                     try:
                         student = PeopleAPI.instance.get_kerberos(kerberos)
                         if not student.undergrad:
-                            express_entry[4] = 'guest must be an undergrad'
+                            express_entry[4] = 'kerberos must belong to a current student'
                             continue
                     except StudentNotFoundException:
                         express_entry[4] = 'kerberos must belong to a current student'
@@ -172,7 +172,7 @@ class GuestListController:
                     try:
                         student = PeopleAPI.instance.get_kerberos(kerberos)
                         if not student.undergrad:
-                            entry[3] = 'guest must be an undergrad'
+                            entry[3] = 'kerberos must belong to a current student'
                             continue
                     except StudentNotFoundException:
                         entry[3] = 'kerberos must belong to a current student'
