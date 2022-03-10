@@ -83,7 +83,7 @@ class Student:
     def __init__(self, data):
         item = data['item']
         self.kerberos = item['kerberosId']
-        self.undergrad = 'classYear' in item['affiliations'][0] and item['affiliations'][0]['classYear'] != 'G'
+        self.undergrad = item['affiliations'][0]['type'] == 'student'
 
 class StudentNotFoundException(Exception):
     pass
