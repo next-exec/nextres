@@ -158,8 +158,8 @@ class GuestListController:
                     if kerberos in duplicates:
                         entry[3] = 'kerberos must only be on a guest list once'
                         continue
-                    if not fullmatch('[a-z0-9]*', kerberos):
-                        entry[3] = 'kerberos must only contain lowercase letters and numbers'
+                    if not fullmatch('[a-z0-9_]*', kerberos):
+                        entry[3] = 'kerberos must only contain lowercase letters, numbers and underscores only'
                         continue
                     if len(phone) >15:
                         entry[3] = "phone numbers can't have more than 15 digits"
