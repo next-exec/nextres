@@ -41,7 +41,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
               {% for entry in existing_express %}
                 <div class="form-group">
                   {% if entry[4].startswith('kerberos') %}
-                    <input class="form-control is-invalid" maxlength="8" pattern="[a-z0-9]*" title="lowercase letters and numbers only" name="kerberoi_express" value="{{ entry[0] }}">
+                    <input class="form-control is-invalid" maxlength="8" pattern="[a-z0-9_]*" title="lowercase letters, numbers and underscores only" name="kerberoi_express" value="{{ entry[0] }}">
                     <div class="invalid-feedback">
                       {{ entry[4] }}
                     </div>
@@ -54,12 +54,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
               {% for guest in express %}
                 <div class="form-group">
                   <!-- imagine having consistency in *http implementations* -->
-                  <input class="form-control" maxlength="8" pattern="[a-z0-9]*" title="lowercase letters and numbers only" name="kerberoi_express" value="{{ guest.kerberos }}">
+                  <input class="form-control" maxlength="8" pattern="[a-z0-9_]*" title="lowercase letters, numbers and underscores only" name="kerberoi_express" value="{{ guest.kerberos }}">
                 </div>
               {% endfor %}
               {% for _ in range(3 - express | length) %}
                 <div class="form-group">
-                  <input class="form-control" maxlength="8" pattern="[a-z0-9]*" title="lowercase letters and numbers only" name="kerberoi_express">
+                  <input class="form-control" maxlength="8" pattern="[a-z0-9_]*" title="lowercase letters, numbers and underscores only" name="kerberoi_express">
                 </div>
               {% endfor %}
             {% endif %}
@@ -168,7 +168,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
               {% for entry in existing %}
                 <div class="form-group">
                   {% if entry[3].startswith('kerberos') %}
-                    <input class="form-control is-invalid" maxlength="8" pattern="[a-z0-9]*" title="lowercase letters and numbers only" name="kerberoi" value="{{ entry[0] }}">
+                    <input class="form-control is-invalid" maxlength="8" pattern="[a-z0-9_]*" title="lowercase letters, numbers and underscores only" name="kerberoi" value="{{ entry[0] }}">
                     <div class="invalid-feedback">
                       {{ entry[3] }}
                     </div>
@@ -181,12 +181,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
               {% for guest in desk %}
                 <div class="form-group">
                   <!-- imagine having consistency in *http implementations* -->
-                  <input class="form-control" maxlength="8" pattern="[a-z0-9]*" title="lowercase letters and numbers only" name="kerberoi" value="{{ guest.kerberos }}">
+                  <input class="form-control" maxlength="8" pattern="[a-z0-9_]*" title="lowercase letters, numbers and underscores only" name="kerberoi" value="{{ guest.kerberos }}">
                 </div>
               {% endfor %}
               {% for _ in range(5 - desk | length) %}
                 <div class="form-group">
-                  <input class="form-control" maxlength="8" pattern="[a-z0-9]*" title="lowercase letters and numbers only" name="kerberoi">
+                  <input class="form-control" maxlength="8" pattern="[a-z0-9_]*" title="lowercase letters, numbers and underscores only" name="kerberoi">
                 </div>
               {% endfor %}
             {% endif %}
