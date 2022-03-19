@@ -104,7 +104,7 @@ class GuestListController:
                     if kerberos in duplicates:
                         express_entry[4] = 'kerberos must only be on a guest list once'
                         continue
-                    if not fullmatch('[a-z0-9]*', kerberos):
+                    if not fullmatch('[a-z0-9_]*', kerberos):
                         express_entry[4] = 'kerberos must only contain lowercase letters and numbers'
                         continue
                     if len(mit_id) != 9:
