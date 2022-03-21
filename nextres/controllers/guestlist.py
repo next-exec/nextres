@@ -54,14 +54,14 @@ class GuestListController:
                                    existing=None,
                                    desk=current_user.guests.filter_by(list_type=GuestListType.Desk).all(),
                                    express=current_user.guests.filter_by(list_type=GuestListType.Express).all(),
-                                   settings=db.session.query(Settings))
+                                   settings=db.session.query(Settings).first())
             else:
                 ctx = ResponseContext('guestlists/edit.html', {
                     'existing': None,
                     'existing_express': None,
                     'desk': current_user.guests.filter_by(list_type=GuestListType.Desk).all(),
                     'express': current_user.guests.filter_by(list_type=GuestListType.Express).all(),
-                    'settings': db.session.query(Settings)
+                    'settings': db.session.query(Settings).first()
                 })
                 form = request.form
                 kerberoi = form.getlist('kerberoi')
