@@ -41,12 +41,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
               {% for entry in existing_express %}
                 <div class="form-group">
                   {% if entry[4].startswith('kerberos') %}
-                    <input class="form-control is-invalid" maxlength="8" pattern="[a-z0-9_]*" title="lowercase letters, numbers and underscores only" name="kerberoi_express" value="{{ entry[0] }}" tabindex="0">
+                    <input class="form-control is-invalid" maxlength="8" pattern="[a-z0-9_]*" title="lowercase letters, numbers and underscores only" name="kerberoi_express" value="{{ entry[0] }}" tabindex="0" {{ "" if settings.express_guest_editable else "readonly" }}>
                     <div class="invalid-feedback">
                       {{ entry[4] }}
                     </div>
                   {% else %}
-                    <input class="form-control" maxlength="8" name="kerberoi_express" value="{{ entry[0] }}" tabindex="0">
+                    <input class="form-control" maxlength="8" name="kerberoi_express" value="{{ entry[0] }}" tabindex="0" {{ "" if settings.express_guest_editable else "readonly" }}>
                   {% endif %}
                 </div>
               {% endfor %}
@@ -54,12 +54,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
               {% for guest in express %}
                 <div class="form-group">
                   <!-- imagine having consistency in *http implementations* -->
-                  <input class="form-control" maxlength="8" pattern="[a-z0-9_]*" title="lowercase letters, numbers and underscores only" name="kerberoi_express" value="{{ guest.kerberos }}" tabindex="0">
+                  <input class="form-control" maxlength="8" pattern="[a-z0-9_]*" title="lowercase letters, numbers and underscores only" name="kerberoi_express" value="{{ guest.kerberos }}" tabindex="0" {{ "" if settings.express_guest_editable else "readonly" }}>
                 </div>
               {% endfor %}
               {% for _ in range(3 - express | length) %}
                 <div class="form-group">
-                  <input class="form-control" maxlength="8" pattern="[a-z0-9_]*" title="lowercase letters, numbers and underscores only" name="kerberoi_express" tabindex="0">
+                  <input class="form-control" maxlength="8" pattern="[a-z0-9_]*" title="lowercase letters, numbers and underscores only" name="kerberoi_express" tabindex="0" {{ "" if settings.express_guest_editable else "readonly" }}>
                 </div>
               {% endfor %}
             {% endif %}
@@ -71,24 +71,24 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
               {% for entry in existing_express %}
                 <div class="form-group">
                   {% if entry[4].startswith('name') %}
-                    <input class="form-control is-invalid" maxlength="255" name="names_express" value="{{ entry[1] }}" tabindex="0">
+                    <input class="form-control is-invalid" maxlength="255" name="names_express" value="{{ entry[1] }}" tabindex="0" {{ "" if settings.express_guest_editable else "readonly" }}>
                     <div class="invalid-feedback">
                       {{ entry[4] }}
                     </div>
                   {% else %}
-                    <input class="form-control" maxlength="255" name="names_express" value="{{ entry[1] }}" tabindex="0">
+                    <input class="form-control" maxlength="255" name="names_express" value="{{ entry[1] }}" tabindex="0" {{ "" if settings.express_guest_editable else "readonly" }}>
                   {% endif %}
                 </div>
               {% endfor %}
             {% else %}
               {% for guest in express %}
                 <div class="form-group">
-                  <input class="form-control" maxlength="255" name="names_express" value="{{ guest.name }}" tabindex="0">
+                  <input class="form-control" maxlength="255" name="names_express" value="{{ guest.name }}" tabindex="0" {{ "" if settings.express_guest_editable else "readonly" }}>
                 </div>
               {% endfor %}
               {% for _ in range(3 - express | length) %}
                 <div class="form-group">
-                  <input class="form-control" maxlength="255" name="names_express"  tabindex="0">
+                  <input class="form-control" maxlength="255" name="names_express"  tabindex="0" {{ "" if settings.express_guest_editable else "readonly" }}>
                 </div>
               {% endfor %}
             {% endif %}
@@ -99,24 +99,24 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
               {% for entry in existing_express %}
                 <div class="form-group">
                   {% if entry[4].startswith('id') %}
-                    <input class="form-control is-invalid" name="mit_id" maxlength="9" value="{{ entry[2] }}" tabindex="0">
+                    <input class="form-control is-invalid" name="mit_id" maxlength="9" value="{{ entry[2] }}" tabindex="0" {{ "" if settings.express_guest_editable else "readonly" }}>
                     <div class="invalid-feedback">
                       {{ entry[4] }}
                     </div>
                   {% else %}
-                    <input class="form-control" name="mit_id" maxlength="9" value="{{ entry[2] }}" tabindex="0">
+                    <input class="form-control" name="mit_id" maxlength="9" value="{{ entry[2] }}" tabindex="0" {{ "" if settings.express_guest_editable else "readonly" }}>
                   {% endif %}
                 </div>
               {% endfor %}
             {% else %}
               {% for guest in express %}
                 <div class="form-group">
-                  <input class="form-control" name="mit_id" maxlength="9" value="{{ guest.mit_id }}" tabindex="0">
+                  <input class="form-control" name="mit_id" maxlength="9" value="{{ guest.mit_id }}" tabindex="0" {{ "" if settings.express_guest_editable else "readonly" }}>
                 </div>
               {% endfor %}
               {% for _ in range(3 - express | length) %}
                 <div class="form-group">
-                  <input class="form-control" name="mit_id" maxlength="9" tabindex="0">
+                  <input class="form-control" name="mit_id" maxlength="9" tabindex="0" {{ "" if settings.express_guest_editable else "readonly" }}>
                 </div>
               {% endfor %}
             {% endif %}
@@ -128,24 +128,24 @@ along with this program. If not, see <https://www.gnu.org/licenses/>
               {% for entry in existing_express %}
                 <div class="form-group">
                   {% if entry[4].startswith('phone') %}
-                    <input class="form-control is-invalid" name="phone_express" maxlength="15" value="{{ entry[3] }}" tabindex="0">
+                    <input class="form-control is-invalid" name="phone_express" maxlength="15" value="{{ entry[3] }}" tabindex="0" {{ "" if settings.express_guest_editable else "readonly" }}>
                     <div class="invalid-feedback">
                       {{ entry[4] }}
                     </div>
                   {% else %}
-                    <input class="form-control" name="phone_express" maxlength="15" value="{{ entry[3] }}" tabindex="0">
+                    <input class="form-control" name="phone_express" maxlength="15" value="{{ entry[3] }}" tabindex="0" {{ "" if settings.express_guest_editable else "readonly" }}>
                   {% endif %}
                 </div>
               {% endfor %}
             {% else %}
               {% for guest in express %}
                 <div class="form-group">
-                  <input class="form-control" name="phone_express" maxlength="15" value="{{ guest.phone }}" tabindex="0">
+                  <input class="form-control" name="phone_express" maxlength="15" value="{{ guest.phone }}" tabindex="0" {{ "" if settings.express_guest_editable else "readonly" }}>
                 </div>
               {% endfor %}
               {% for _ in range(3 - express | length) %}
                 <div class="form-group">
-                  <input class="form-control" name="phone_express" maxlength="15" tabindex="0">
+                  <input class="form-control" name="phone_express" maxlength="15" tabindex="0" {{ "" if settings.express_guest_editable else "readonly" }}>
                 </div>
               {% endfor %}
             {% endif %}

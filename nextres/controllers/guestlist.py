@@ -23,7 +23,7 @@ from requests import get
 from nextres.constants import FLASH_ERROR, FLASH_SUCCESS
 from nextres.controllers.auth import AuthController
 from nextres.database import db
-from nextres.database.models import User
+from nextres.database.models import User, Settings
 from nextres.database.models.guest import Guest, GuestListType
 from nextres.util import PeopleAPI, ResponseContext, StudentNotFoundException
 
@@ -53,13 +53,15 @@ class GuestListController:
                   return render_template('guestlists/edit.html',
                                    existing=None,
                                    desk=current_user.guests.filter_by(list_type=GuestListType.Desk).all(),
-                                   express=current_user.guests.filter_by(list_type=GuestListType.Express).all())
+                                   express=current_user.guests.filter_by(list_type=GuestListType.Express).all(),
+                                   settings=db.session.query(Settings))
             else:
                 ctx = ResponseContext('guestlists/edit.html', {
                     'existing': None,
                     'existing_express': None,
                     'desk': current_user.guests.filter_by(list_type=GuestListType.Desk).all(),
-                    'express': current_user.guests.filter_by(list_type=GuestListType.Express).all()
+                    'express': current_user.guests.filter_by(list_type=GuestListType.Express).all(),
+                    'settings': db.session.query(Settings)
                 })
                 form = request.form
                 kerberoi = form.getlist('kerberoi')
